@@ -1,0 +1,3564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apna Centre | Premium Digital Services</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           1. CORE VARIABLES & RESET
+           ========================================================================== */
+        :root {
+            --bg-dark: #050505;
+            --bg-card: rgba(20, 20, 20, 0.7); 
+            --gold: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.6);
+            --text-white: #ffffff;
+            --text-silver: #d1d1d1;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Montserrat', sans-serif; 
+            scroll-behavior: smooth; 
+            cursor: none; 
+        }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-white); 
+            overflow-x: hidden; 
+            -webkit-tap-highlight-color: transparent; 
+            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #050505 70%); 
+            top: 0 !important; /* Fix for Google Translate */
+            position: relative;
+        }
+
+        /* ==========================================================================
+           NEW: CUSTOM MAGIC CURSOR STYLES
+           ========================================================================== */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            pointer-events: none; /* Let clicks pass through */
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        .custom-cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 4px;
+            background-color: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100000;
+            transform: translate(-50%, -50%);
+        }
+
+        .custom-cursor.hover {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        a, button, input, select, textarea, .card, .portfolio-item, .notice-list li, .float-btn, .help-float-btn, .logo, .hamburger, .close-btn, .close-lightbox {
+            cursor: none;
+        }
+        
+        @media (max-width: 768px) {
+            .custom-cursor, .custom-cursor-dot {
+                display: none;
+            }
+            * {
+                cursor: auto; 
+            }
+            a, button, input, select, textarea, .card, .portfolio-item, .notice-list li, .float-btn, .help-float-btn, .logo, .hamburger, .close-btn, .close-lightbox {
+                cursor: pointer;
+            }
+        }
+
+        /* NEW: Animated Particle Background Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; 
+            pointer-events: none; 
+        }
+
+        /* Hiding Default Google Translate Bar */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        #google_translate_element { position: absolute; top: -9999px; left: -9999px; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { 
+            width: 8px; 
+        } 
+        
+        ::-webkit-scrollbar-track { 
+            background: var(--bg-dark); 
+        } 
+        
+        ::-webkit-scrollbar-thumb { 
+            background: var(--gold); 
+            border-radius: 10px; 
+        }
+
+        /* Scroll Reveal Animations */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(50px); 
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); 
+        } 
+        
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+
+        /* Page Hide/Show Logic (For Multi-Page Effect) */
+        .page-section { 
+            display: none; 
+            animation: fadeInPage 0.5s ease-in-out; 
+        } 
+        
+        .page-section.active { 
+            display: block; 
+        }
+        
+        @keyframes fadeInPage { 
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            } 
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            } 
+        }
+
+        /* ==========================================================================
+           2. HEADER & NAVIGATION
+           ========================================================================== */
+        header { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            padding: 15px 40px; 
+            background: rgba(5, 5, 5, 0.85); 
+            backdrop-filter: blur(15px); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(255, 215, 0, 0.15); 
+            transition: 0.4s; 
+        }
+        
+        header.scrolled { 
+            padding: 10px 40px; 
+            background: rgba(0, 0, 0, 0.95); 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.8); 
+        }
+        
+        /* Top Scroll Progress Bar Styling */
+        #progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: transparent;
+            z-index: 1001; 
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: var(--gold);
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px var(--gold);
+        }
+
+        /* LOGO STYLING - UPDATED WITH PREMIUM FONT ICON */
+        .logo { 
+            color: var(--gold); 
+            font-size: 1.6rem; 
+            font-weight: 800; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            text-shadow: 0 0 10px rgba(255,215,0,0.3); 
+            cursor: pointer;
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        /* NEW: Styling for the Font Icon Logo */
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--gold);
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+            animation: slowSpin 10s linear infinite;
+        }
+        
+        @keyframes slowSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-logo {
+            height: 45px; 
+            width: auto;
+            object-fit: contain;
+            display: none; 
+        }
+        
+        .nav-links { 
+            display: flex; 
+            gap: 20px; 
+            align-items: center; 
+        }
+        
+        .nav-links a { 
+            color: var(--text-white); 
+            text-decoration: none; 
+            font-size: 1rem; 
+            font-weight: 600; 
+            transition: 0.3s; 
+            position: relative; 
+            cursor: pointer; 
+        }
+        
+        .nav-links a::after { 
+            content: ''; 
+            position: absolute; 
+            left: 0; 
+            bottom: -5px; 
+            width: 0; 
+            height: 2px; 
+            background: var(--gold); 
+            transition: 0.3s; 
+        }
+        
+        .nav-links a:hover, 
+        .nav-links a.active-link { 
+            color: var(--gold); 
+        } 
+        
+        .nav-links a:hover::after, 
+        .nav-links a.active-link::after { 
+            width: 100%; 
+        }
+        
+        /* Help Button in Header */
+        .header-btn { 
+            background: transparent; 
+            border: 1px solid var(--gold); 
+            color: var(--gold); 
+            padding: 8px 15px; 
+            border-radius: 20px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-size: 0.9rem;
+        } 
+        
+        .header-btn:hover { 
+            background: var(--gold); 
+            color: black; 
+            box-shadow: 0 0 15px rgba(255,215,0,0.5); 
+            transform: scale(1.05); 
+        }
+        
+        .hamburger { 
+            display: none; 
+            font-size: 1.8rem; 
+            color: var(--gold); 
+            cursor: pointer; 
+            transition: 0.3s; 
+        } 
+        
+        .hamburger:hover { 
+            transform: scale(1.1); 
+            text-shadow: 0 0 10px var(--gold); 
+        }
+
+        /* Mobile Sidebar */
+        .sidebar { 
+            position: fixed; 
+            top: 0; 
+            right: -300px; 
+            width: 280px; 
+            height: 100%; 
+            background: rgba(10, 10, 10, 0.98); 
+            backdrop-filter: blur(20px); 
+            padding-top: 80px; 
+            transition: 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+            z-index: 999; 
+            box-shadow: -10px 0 30px rgba(0,0,0,0.9); 
+            border-left: 1px solid rgba(255, 215, 0, 0.2); 
+        } 
+        
+        .sidebar.active { 
+            right: 0; 
+        }
+        
+        .sidebar a { 
+            display: block; 
+            padding: 18px 30px; 
+            color: white; 
+            text-decoration: none; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            transition: 0.3s; 
+            cursor: pointer; 
+        } 
+        
+        .sidebar a:hover { 
+            color: var(--gold); 
+            padding-left: 45px; 
+            background: rgba(255, 215, 0, 0.1); 
+        }
+
+        @media (max-width: 900px) { 
+            .nav-links { display: none; } 
+            .hamburger { display: block; } 
+            header { padding: 15px 20px; } 
+            header.scrolled { padding: 12px 20px; } 
+            .logo { font-size: 1.3rem; gap: 10px; } 
+            .logo-icon { font-size: 1.5rem; }
+        }
+
+        /* ==========================================================================
+           3. HOME PAGE SECTIONS
+           ========================================================================== */
+        .container { 
+            padding: 100px 20px 40px; 
+            max-width: 1250px; 
+            margin: 0 auto; 
+        } 
+        
+        .section-title { 
+            text-align: center; 
+            font-size: 3rem; 
+            color: var(--text-white); 
+            margin-bottom: 50px; 
+            font-family: 'Playfair Display', serif; 
+        } 
+        
+        .section-title span { 
+            color: var(--gold); 
+        }
+
+        /* Hero */
+        .hero { 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            position: relative; 
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('1111111.JPG') center/cover fixed; 
+        }
+        
+        .hero h1 { 
+            font-size: 4.5rem; 
+            margin-bottom: 15px; 
+            color: var(--gold); 
+            font-family: 'Playfair Display', serif; 
+            text-shadow: 0px 5px 15px rgba(255, 215, 0, 0.3); 
+            animation: slideDown 1.2s ease; 
+        } 
+        
+        .hero h2 { 
+            color: var(--text-white); 
+            font-size: 1.5rem; 
+            font-weight: 600; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            background: rgba(255, 255, 255, 0.05); 
+            padding: 15px 40px; 
+            border-radius: 50px; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(10px); 
+            animation: fadeIn 2s ease-in; 
+            min-width: 350px; 
+        }
+
+        /* Typing cursor blink animation */
+        @keyframes blink-cursor {
+            0%, 100% { border-color: transparent; }
+            50% { border-color: var(--gold); }
+        }
+
+        #typing-text {
+            color: var(--gold);
+            border-right: 3px solid var(--gold);
+            padding-right: 5px;
+            animation: blink-cursor 0.7s infinite;
+        }
+
+        @keyframes slideDown { 
+            from { opacity: 0; transform: translateY(-50px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        } 
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
+
+        /* Before & After Slider */
+        .bna-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 900px; 
+            height: 500px; 
+            margin: 0 auto; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
+            border: 2px solid rgba(255, 215, 0, 0.3); 
+        } 
+        
+        .bna-img { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            pointer-events: none; 
+        } 
+        
+        .bna-before { 
+            filter: grayscale(80%) blur(1px) brightness(0.6); 
+        } 
+        
+        .bna-after-wrapper { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 50%; 
+            height: 100%; 
+            overflow: hidden; 
+            border-right: 4px solid var(--gold); 
+            pointer-events: none; 
+        } 
+        
+        .bna-slider { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: transparent; 
+            outline: none; 
+            -webkit-appearance: none; 
+            appearance: none; 
+            margin: 0; 
+            z-index: 10; 
+            cursor: ew-resize; 
+        } 
+        
+        .bna-slider::-webkit-slider-thumb { 
+            -webkit-appearance: none; 
+            appearance: none; 
+            width: 45px; 
+            height: 45px; 
+            background: var(--gold); 
+            border-radius: 50%; 
+            cursor: ew-resize; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.9); 
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black"><path d="M8 14l-4-4 4-4v8zm8-8l4 4-4 4v-8z"/></svg>'); 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            border: 3px solid white; 
+        } 
+        
+        .bna-labels { 
+            position: absolute; 
+            bottom: 20px; 
+            width: 100%; 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 0 30px; 
+            pointer-events: none; 
+            z-index: 5; 
+        } 
+        
+        .bna-labels span { 
+            background: rgba(0,0,0,0.7); 
+            color: white; 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            font-weight: bold; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            backdrop-filter: blur(5px); 
+        } 
+        
+        @media (max-width: 768px) { 
+            .bna-container { height: 350px; } 
+        }
+
+        /* Services Grid - UPDATED WITH 3D HOVER CLASSES */
+        .services-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 35px;
+            perspective: 1000px; 
+        } 
+        
+        .card { 
+            background: var(--bg-card); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 24px; 
+            padding: 25px; 
+            text-align: center; 
+            transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.1s ease; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            position: relative; 
+            overflow: hidden;
+            transform-style: preserve-3d; 
+            will-change: transform;
+        } 
+        
+        .card-inner {
+            transform: translateZ(30px); 
+        }
+
+        .card:hover { 
+            box-shadow: 0 20px 40px var(--gold-glow); 
+            background: rgba(30, 30, 30, 0.9); 
+            border-color: var(--gold); 
+            z-index: 10;
+        } 
+        
+        .card-img { 
+            width: 100%; 
+            height: 200px; 
+            object-fit: cover; 
+            border-radius: 16px; 
+            margin-bottom: 20px; 
+            transition: 0.5s; 
+        } 
+        
+        .card:hover .card-img { 
+            transform: scale(1.05); 
+        } 
+        
+        .card h3 { 
+            color: var(--gold); 
+            margin-bottom: 12px; 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+        } 
+        
+        .card p { 
+            color: var(--text-silver); 
+            font-size: 0.95rem; 
+            margin-bottom: 25px; 
+            line-height: 1.6; 
+        }
+
+        /* Buttons */
+        .btn-group { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            position: relative; 
+            z-index: 1; 
+        } 
+        
+        .btn { 
+            padding: 14px 20px; 
+            border-radius: 10px; 
+            font-weight: 800; 
+            font-size: 0.85rem; 
+            cursor: pointer; 
+            border: none; 
+            outline: none; 
+            transition: 0.3s; 
+            flex: 1; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        } 
+        
+        .btn-outline { 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--text-white); 
+            color: var(--text-white); 
+        } 
+        
+        .btn-outline:hover { 
+            background: var(--text-white); 
+            color: black; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.5); 
+        } 
+        
+        .btn-gold { 
+            background: linear-gradient(45deg, #FFD700, #FDB931); 
+            color: black; 
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4); 
+        } 
+        
+        .btn-gold:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.6); 
+        } 
+        
+        .btn-fiverr { 
+            background: #00b22d; 
+            color: white; 
+            box-shadow: 0 5px 15px rgba(0, 178, 45, 0.4); 
+        } 
+        
+        .btn-fiverr:hover { 
+            background: #009826; 
+            box-shadow: 0 10px 25px rgba(0, 178, 45, 0.6); 
+            transform: translateY(-3px); 
+        }
+
+        /* ---------------------------------------------------
+           COST CALCULATOR STYLES
+           --------------------------------------------------- */
+        .calculator-wrapper {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .calc-group {
+            margin-bottom: 25px;
+        }
+
+        .calc-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-white);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .calc-select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #444;
+            color: var(--text-white);
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .calc-select:focus {
+            border-color: var(--gold);
+        }
+
+        .calc-result-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px dashed var(--gold);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .calc-price {
+            font-size: 3.5rem;
+            color: var(--gold);
+            font-weight: 800;
+            margin: 15px 0;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .calc-note {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        /* 2026 Cyber Updates Notice Board - CSS FIX APPLIED HERE */
+        .notice-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+            margin-top: 20px; 
+        } 
+        
+        .notice-card { 
+            background: linear-gradient(145deg, rgba(30,30,30,0.8), rgba(10,10,10,0.9)); 
+            border: 1px solid rgba(255, 215, 0, 0.2); 
+            border-radius: 20px; 
+            padding: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+            position: relative; 
+        } 
+        
+        .notice-card::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 5px; 
+            background: var(--gold); 
+            box-shadow: 0 0 15px var(--gold); 
+        } 
+        
+        .notice-card h3 { 
+            color: var(--text-white); 
+            border-bottom: 2px dashed #444; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+            font-size: 1.3rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        } 
+        
+        .notice-card h3 i { 
+            color: var(--gold); 
+        } 
+        
+        .notice-list { 
+            list-style: none; 
+        } 
+        
+        .notice-list li { 
+            padding: 15px 0; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            transition: 0.3s; 
+            cursor: pointer; 
+        } 
+        
+        .notice-list li:hover { 
+            padding-left: 8px; 
+            background: rgba(255,215,0,0.05); 
+            border-radius: 5px; 
+        } 
+        
+        /* FIX: Removed pointer-events: none; so links can be clicked */
+        .notice-list li a { 
+            color: var(--text-silver); 
+            text-decoration: none; 
+            font-size: 0.95rem; 
+            display: flex; 
+            width: 100%; 
+            align-items: center; 
+            justify-content: space-between; 
+            font-weight: 600; 
+        } 
+        
+        .notice-list li:hover a { 
+            color: var(--gold); 
+        } 
+        
+        .blink-new { 
+            background: #ff2a2a; 
+            color: white; 
+            font-size: 0.65rem; 
+            padding: 3px 8px; 
+            border-radius: 12px; 
+            font-weight: 800; 
+            animation: blink 1.5s infinite; 
+        } 
+        
+        .badge-date { 
+            font-size: 0.75rem; 
+            color: #888; 
+            background: #222; 
+            padding: 3px 8px; 
+            border-radius: 5px; 
+            border: 1px solid #444; 
+        } 
+        
+        @keyframes blink { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.3; } 
+        }
+
+        /* Testimonials */
+        .testimonials-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+            margin-bottom: 40px; 
+        } 
+        
+        .testi-card { 
+            background: rgba(15,15,15,0.8); 
+            border: 1px solid rgba(255,215,0,0.1); 
+            padding: 30px; 
+            border-radius: 20px; 
+            text-align: left; 
+            transition: 0.3s; 
+        } 
+        
+        .testi-card:hover { 
+            border-color: var(--gold); 
+            transform: translateY(-5px); 
+        } 
+        
+        .stars { 
+            color: var(--gold); 
+            margin-bottom: 15px; 
+            font-size: 1.2rem; 
+        } 
+        
+        .testi-text { 
+            font-style: italic; 
+            color: #ccc; 
+            margin-bottom: 20px; 
+            line-height: 1.6; 
+        } 
+        
+        .testi-client { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        } 
+        
+        .client-img { 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            border: 2px solid var(--gold); 
+        } 
+        
+        .client-info h4 { 
+            color: white; 
+            font-size: 1rem; 
+        } 
+        
+        .client-info span { 
+            color: var(--gold); 
+            font-size: 0.8rem; 
+        }
+
+        /* ==========================================================================
+           4. PORTFOLIO & ABOUT PAGES
+           ========================================================================== */
+        .portfolio-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 15px; 
+        } 
+        
+        .portfolio-item { 
+            position: relative; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            cursor: pointer; 
+            height: 250px; 
+        } 
+        
+        .portfolio-item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: 0.5s; 
+        } 
+        
+        .portfolio-item:hover img { 
+            transform: scale(1.1); 
+            filter: brightness(0.6); 
+        } 
+        
+        .portfolio-overlay { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            color: var(--gold); 
+            font-size: 3rem; 
+            opacity: 0; 
+            transition: 0.4s; 
+        } 
+        
+        .portfolio-item:hover .portfolio-overlay { 
+            opacity: 1; 
+        }
+        
+        .about-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 50px; 
+            align-items: center; 
+            background: rgba(20,20,20,0.5); 
+            padding: 50px; 
+            border-radius: 30px; 
+            border: 1px solid rgba(255,215,0,0.2); 
+        } 
+        
+        .about-text h3 { 
+            color: var(--gold); 
+            font-size: 2rem; 
+            margin-bottom: 20px; 
+            font-family: 'Playfair Display'; 
+        } 
+        
+        .about-text p { 
+            color: #ccc; 
+            line-height: 1.8; 
+            margin-bottom: 20px; 
+            font-size: 1.05rem; 
+        } 
+        
+        @media (max-width: 768px) { 
+            .about-grid { 
+                grid-template-columns: 1fr; 
+                padding: 20px; 
+                text-align: center; 
+            } 
+        }
+
+        /* ==========================================================================
+           5. CONTACT & ORDER TRACKER
+           ========================================================================== */
+        .tracker-container { 
+            background: rgba(10,10,10,0.9); 
+            border: 2px solid var(--gold); 
+            border-radius: 20px; 
+            padding: 40px; 
+            max-width: 800px; 
+            margin: 0 auto 60px; 
+            text-align: center; 
+            box-shadow: 0 10px 40px rgba(255,215,0,0.1); 
+        } 
+        
+        .tracker-input-group { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-bottom: 40px; 
+        } 
+        
+        .tracker-input { 
+            padding: 15px 20px; 
+            width: 60%; 
+            border-radius: 10px; 
+            border: 1px solid #444; 
+            background: #222; 
+            color: white; 
+            font-size: 1.1rem; 
+            outline: none; 
+            text-transform: uppercase; 
+        } 
+        
+        .tracker-input:focus { 
+            border-color: var(--gold); 
+        }
+        
+        .tracker-steps { 
+            display: flex; 
+            justify-content: space-between; 
+            position: relative; 
+            display: none; 
+        } 
+        
+        .tracker-steps.active { 
+            display: flex; 
+            animation: fadeIn 0.5s; 
+        } 
+        
+        .tracker-line { 
+            position: absolute; 
+            top: 25px; 
+            left: 10%; 
+            width: 80%; 
+            height: 4px; 
+            background: #333; 
+            z-index: 1; 
+        } 
+        
+        .tracker-progress { 
+            position: absolute; 
+            top: 25px; 
+            left: 10%; 
+            width: 0%; 
+            height: 4px; 
+            background: var(--gold); 
+            z-index: 2; 
+            transition: 1s ease; 
+            box-shadow: 0 0 10px var(--gold); 
+        } 
+        
+        .step { 
+            position: relative; 
+            z-index: 3; 
+            width: 25%; 
+        } 
+        
+        .step-icon { 
+            width: 50px; 
+            height: 50px; 
+            background: #222; 
+            border: 3px solid #555; 
+            border-radius: 50%; 
+            margin: 0 auto 15px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 1.2rem; 
+            color: #555; 
+            transition: 0.5s; 
+        } 
+        
+        .step.completed .step-icon { 
+            background: var(--gold); 
+            border-color: var(--gold); 
+            color: black; 
+            box-shadow: 0 0 15px rgba(255,215,0,0.5); 
+        } 
+        
+        .step-text { 
+            color: #888; 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+            transition: 0.5s; 
+        } 
+        
+        .step.completed .step-text { 
+            color: white; 
+            text-shadow: 0 0 5px rgba(255,255,255,0.5); 
+        }
+
+        .tracker-error-box { 
+            display: none; 
+            background: rgba(255,0,0,0.1); 
+            border: 1px solid #ff2a2a; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+        } 
+        
+        .loader { 
+            display: none; 
+            margin: 20px auto; 
+            border: 4px solid #333; 
+            border-top: 4px solid var(--gold); 
+            border-radius: 50%; 
+            width: 40px; 
+            height: 40px; 
+            animation: spin 1s linear infinite; 
+        } 
+        
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+
+        .contact-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
+        } 
+        
+        .contact-card { 
+            background: rgba(20,20,20,0.8); 
+            padding: 40px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            text-align: center; 
+        } 
+        
+        .contact-card i { 
+            font-size: 3rem; 
+            color: var(--gold); 
+            margin-bottom: 20px; 
+        } 
+        
+        .contact-card h4 { 
+            font-size: 1.5rem; 
+            margin-bottom: 15px; 
+        } 
+        
+        .contact-card p { 
+            color: #ccc; 
+            margin-bottom: 10px; 
+        } 
+        
+        @media (max-width: 768px) { 
+            .contact-grid { grid-template-columns: 1fr; } 
+            .tracker-input-group { flex-direction: column; } 
+            .tracker-input { width: 100%; } 
+        }
+
+        /* ==========================================================================
+           6. GLOBAL OWNER SECTION & FOOTER
+           ========================================================================== */
+        .owner-section { 
+            padding: 80px 20px; 
+            text-align: center; 
+            background: radial-gradient(circle, #1a1a1a 0%, #050505 100%); 
+            border-top: 1px solid rgba(255,215,0,0.1); 
+        } 
+        
+        .owner-card { 
+            background: rgba(20, 20, 20, 0.6); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255,215,0,0.3); 
+            padding: 40px; 
+            border-radius: 30px; 
+            max-width: 420px; 
+            margin: 0 auto; 
+            position: relative; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8); 
+        } 
+        
+        .owner-badge { 
+            position: absolute; 
+            top: -50px;
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: linear-gradient(45deg, #FFD700, #FDB931); 
+            color: black; 
+            padding: 8px 25px; 
+            border-radius: 30px; 
+            font-weight: 900; 
+            font-size: 0.9rem; 
+            letter-spacing: 2px; 
+            box-shadow: 0 5px 15px rgba(255,215,0,0.4); 
+        } 
+        
+        .profile-pic { 
+            width: 140px; 
+            height: 140px; 
+            border-radius: 50%; 
+            border: 4px solid var(--gold); 
+            margin-bottom: 20px; 
+            background: #222; 
+            object-fit: cover; 
+            padding: 5px; 
+        } 
+        
+        .contact-info p { 
+            color: #ccc; 
+            margin-bottom: 15px; 
+            font-size: 1.05rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 12px; 
+        }
+
+        footer { 
+            background: #080808; 
+            border-top: 2px solid rgba(255, 215, 0, 0.2); 
+            padding: 60px 20px 20px; 
+            color: var(--text-silver); 
+            position: relative; 
+            margin-top: 50px; 
+        } 
+        
+        .footer-grid { 
+            max-width: 1250px; 
+            margin: 0 auto; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 40px; 
+            margin-bottom: 40px; 
+        } 
+        
+        .footer-col h3 { 
+            color: var(--gold); 
+            font-size: 1.3rem; 
+            margin-bottom: 20px; 
+            font-family: 'Playfair Display', serif; 
+        } 
+        
+        .footer-col p { 
+            line-height: 1.8; 
+            font-size: 0.95rem; 
+        } 
+        
+        .footer-links { 
+            list-style: none; 
+        } 
+        
+        .footer-links li { 
+            margin-bottom: 12px; 
+        } 
+        
+        .footer-links a { 
+            color: var(--text-silver); 
+            text-decoration: none; 
+            transition: 0.3s; 
+            cursor: pointer; 
+        } 
+        
+        .footer-links a:hover { 
+            color: var(--gold); 
+            transform: translateX(8px); 
+            display: inline-block; 
+        } 
+        
+        .footer-socials { 
+            display: flex; 
+            gap: 15px; 
+            margin-top: 20px; 
+        } 
+        
+        .footer-socials a { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background: rgba(255,255,255,0.05); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            color: white; 
+            transition: 0.3s; 
+            border: 1px solid rgba(255,255,255,0.1); 
+        } 
+        
+        .footer-socials a:hover { 
+            background: var(--gold); 
+            color: black; 
+            transform: translateY(-5px); 
+            border-color: var(--gold); 
+        } 
+        
+        .footer-bottom { 
+            text-align: center; 
+            padding-top: 20px; 
+            border-top: 1px solid rgba(255,255,255,0.05); 
+            font-size: 0.9rem; 
+            color: #888; 
+        }
+
+        /* ==========================================================================
+           7. FLOATING BUTTONS & SMART CHATBOT
+           ========================================================================== */
+        
+        /* Right Side Buttons (WhatsApp & Call) */
+        .floating-btns { 
+            position: fixed; 
+            bottom: 30px; 
+            right: 25px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            z-index: 2000; 
+        } 
+        
+        .float-btn { 
+            width: 65px; 
+            height: 65px; 
+            border-radius: 50%; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            color: white; 
+            font-size: 2.2rem; 
+            text-decoration: none; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6); 
+            transition: 0.3s; 
+        } 
+        
+        .whatsapp-float { 
+            background: linear-gradient(45deg, #25D366, #128C7E); 
+        } 
+        
+        .call-float { 
+            background: linear-gradient(45deg, #007bff, #0056b3); 
+            font-size: 1.6rem; 
+        } 
+        
+        .float-btn:hover { 
+            transform: scale(1.15) translateY(-5px); 
+        }
+
+        /* Left Side Floating Help Button */
+        .help-float-btn {
+            position: fixed; 
+            bottom: 30px; 
+            left: 25px; 
+            width: 65px; 
+            height: 65px;
+            border-radius: 50%; 
+            background: linear-gradient(45deg, #FFD700, #FDB931);
+            color: black; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            font-size: 2.2rem; 
+            cursor: pointer; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            transition: 0.3s; 
+            z-index: 2000; 
+            animation: pulse-gold 2s infinite;
+        }
+        
+        .help-float-btn:hover { 
+            transform: scale(1.15) translateY(-5px); 
+        }
+
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        /* Help Desk Chatbot Panel */
+        .help-panel {
+            position: fixed; 
+            bottom: 110px; 
+            left: 25px; 
+            width: 350px;
+            background: rgba(15, 15, 15, 0.98); 
+            border: 1px solid var(--gold);
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            z-index: 2001; 
+            transform: scale(0); 
+            transform-origin: bottom left;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden;
+            height: 500px;
+        }
+        
+        .help-panel.active { 
+            transform: scale(1); 
+        }
+
+        .help-header {
+            background: rgba(255, 215, 0, 0.1); 
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+        
+        .help-header h3 { 
+            color: var(--gold); 
+            font-size: 1.1rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        
+        .close-help { 
+            color: #ccc; 
+            font-size: 1.5rem; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        
+        .close-help:hover { 
+            color: var(--gold); 
+            transform: rotate(90deg); 
+        }
+
+        /* Chat Area */
+        .chat-body {
+            flex: 1; 
+            padding: 15px; 
+            overflow-y: auto;
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px;
+        }
+        
+        .chat-body::-webkit-scrollbar { 
+            width: 5px; 
+        }
+        
+        .chat-body::-webkit-scrollbar-thumb { 
+            background: #444; 
+            border-radius: 5px; 
+        }
+
+        .chat-msg { 
+            max-width: 85%; 
+            padding: 12px 15px; 
+            border-radius: 15px; 
+            font-size: 0.9rem; 
+            line-height: 1.4; 
+        }
+        
+        .bot-msg { 
+            background: #222; 
+            color: #fff; 
+            align-self: flex-start; 
+            border-bottom-left-radius: 2px; 
+            border: 1px solid #333;
+        }
+        
+        .user-msg { 
+            background: var(--gold); 
+            color: #000; 
+            align-self: flex-end; 
+            border-bottom-right-radius: 2px; 
+            font-weight: 600;
+        }
+        
+        .chat-quick-options { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+            margin-top: 5px; 
+        }
+        
+        .quick-btn {
+            background: rgba(255,215,0,0.1); 
+            border: 1px solid var(--gold); 
+            color: var(--gold);
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        
+        .quick-btn:hover { 
+            background: var(--gold); 
+            color: black; 
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            display: flex; 
+            padding: 15px; 
+            border-top: 1px solid #333; 
+            background: #0a0a0a;
+        }
+        
+        .chat-input {
+            flex: 1; 
+            background: #222; 
+            border: 1px solid #444; 
+            border-radius: 20px;
+            padding: 10px 15px; 
+            color: white; 
+            outline: none; 
+            font-size: 0.9rem;
+        }
+        
+        .chat-input:focus { 
+            border-color: var(--gold); 
+        }
+        
+        .chat-send-btn {
+            background: var(--gold); 
+            color: black; 
+            border: none; 
+            width: 40px; 
+            height: 40px;
+            border-radius: 50%; 
+            margin-left: 10px; 
+            cursor: pointer; 
+            font-size: 1.1rem;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            transition: 0.3s;
+        }
+        
+        .chat-send-btn:hover { 
+            transform: scale(1.1); 
+        }
+
+        @media (max-width: 768px) {
+            .help-panel { 
+                width: 90%; 
+                left: 5%; 
+                bottom: 100px; 
+            }
+        }
+
+        /* ==========================================================================
+           8. MODALS STYLING
+           ========================================================================== */
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.85); 
+            backdrop-filter: blur(8px); 
+            z-index: 3000; 
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+            opacity: 0; 
+            animation: fadeIn 0.4s forwards; 
+        }
+        
+        .modal-box { 
+            background: rgba(15, 15, 15, 0.95); 
+            border: 1px solid var(--gold); 
+            padding: 35px; 
+            border-radius: 24px; 
+            width: 100%; 
+            max-width: 600px; 
+            position: relative; 
+            max-height: 85vh; 
+            overflow-y: auto; 
+            transform: scale(0.8); 
+            animation: popUp 0.4s forwards; 
+        }
+        
+        @keyframes popUp { 
+            to { transform: scale(1); } 
+        }
+        
+        .close-btn { 
+            position: absolute; 
+            top: 15px; 
+            right: 25px; 
+            font-size: 2.5rem; 
+            color: #888; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        
+        .close-btn:hover { 
+            color: var(--gold); 
+            transform: rotate(90deg); 
+        }
+        
+        .modal-title { 
+            color: var(--gold); 
+            margin-bottom: 25px; 
+            font-family: 'Playfair Display', serif; 
+            font-size: 2rem; 
+            text-align: center; 
+            border-bottom: 1px solid rgba(255,215,0,0.2); 
+            padding-bottom: 15px; 
+        }
+        
+        .form-control { 
+            width: 100%; 
+            padding: 16px; 
+            margin-bottom: 18px; 
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            color: white; 
+            border-radius: 12px; 
+            font-size: 1.05rem; 
+        }
+        
+        .form-control:focus { 
+            border-color: var(--gold); 
+            outline: none; 
+            background: rgba(0,0,0,0.5); 
+        }
+        
+        select.form-control option { 
+            background: #111; 
+            color: #fff; 
+        }
+
+        /* Package Selection Modal Styling */
+        .package-options { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 15px; 
+            margin-top: 20px; 
+        }
+        
+        .pkg-card { 
+            background: #1a1a1a; 
+            border: 1px solid #333; 
+            border-radius: 15px; 
+            padding: 20px 15px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        
+        .pkg-card:hover { 
+            border-color: var(--gold); 
+            transform: translateY(-5px); 
+        }
+        
+        .pkg-card.pro { 
+            border: 1px solid var(--gold); 
+            background: linear-gradient(145deg, #222, #111); 
+            position: relative;
+        }
+        
+        .pkg-card h4 { 
+            color: white; 
+            margin-bottom: 10px; 
+            font-size: 1.2rem; 
+        }
+        
+        .pkg-card .pkg-price { 
+            color: var(--gold); 
+            font-size: 1.6rem; 
+            font-weight: 800; 
+            margin-bottom: 15px; 
+        }
+        
+        .pkg-btn { 
+            background: rgba(255,215,0,0.1); 
+            color: var(--gold); 
+            border: 1px solid var(--gold); 
+            padding: 8px 10px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            width: 100%; 
+            transition: 0.3s; 
+            cursor: pointer;
+        }
+        
+        .pkg-card:hover .pkg-btn { 
+            background: var(--gold); 
+            color: black; 
+        }
+
+        /* Cyber Services Special Options Styling */
+        .cyber-options-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 15px; 
+            margin-top: 20px; 
+        }
+        
+        .cyber-opt-card { 
+            background: #1a1a1a; 
+            border: 1px solid #333; 
+            border-radius: 15px; 
+            padding: 25px 15px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        
+        .cyber-opt-card:hover { 
+            border-color: var(--gold); 
+            transform: translateY(-5px); 
+            background: rgba(255,215,0,0.05); 
+        }
+        
+        .cyber-opt-card i { 
+            font-size: 2.5rem; 
+            color: var(--gold); 
+            margin-bottom: 15px; 
+        }
+        
+        .cyber-opt-card h4 { 
+            color: white; 
+            font-size: 1rem; 
+            font-weight: 600; 
+        }
+
+        /* UPDATED: DEMO STYLING FOR LISTS */
+        .demo-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .demo-list-item {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,215,0,0.2);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .demo-list-item:hover {
+            border-color: var(--gold);
+            background: rgba(255,215,0,0.05);
+            transform: translateY(-3px);
+        }
+
+        .demo-list-item i {
+            font-size: 2rem;
+            color: var(--gold);
+        }
+
+        .demo-list-item div h4 {
+            color: white;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .demo-list-item div p {
+            color: #ccc;
+            font-size: 0.75rem;
+        }
+
+        .info-detail { 
+            background: rgba(0,0,0,0.4); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 15px; 
+            text-align: left; 
+        } 
+        
+        .info-detail p { 
+            margin-bottom: 8px; 
+            font-size: 0.95rem; 
+            color: #ccc; 
+        } 
+        
+        .info-detail p span { 
+            font-weight: bold; 
+            color: var(--gold); 
+            margin-right: 5px; 
+        }
+        
+        .demo-gallery { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; 
+            margin-top: 20px; 
+        } 
+        
+        .demo-gallery img, .demo-gallery video { 
+            width: 100%; 
+            height: 120px; 
+            object-fit: cover; 
+            border-radius: 10px; 
+            border: 1px solid #333; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            background: #000; 
+        } 
+        
+        .demo-gallery img:hover { 
+            transform: scale(1.08); 
+            border-color: var(--gold); 
+            z-index: 10;
+        }
+        
+        .lightbox { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            backdrop-filter: blur(10px); 
+            z-index: 4000; 
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+        } 
+        
+        .lightbox img { 
+            max-width: 90%; 
+            max-height: 90%; 
+            border-radius: 15px; 
+        } 
+        
+        .close-lightbox { 
+            position: absolute; 
+            top: 20px; 
+            right: 30px; 
+            color: var(--gold); 
+            font-size: 3.5rem; 
+            cursor: pointer; 
+        }
+
+        /* Review Modal Interactive Stars */
+        .interactive-stars { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin: 20px 0; 
+            font-size: 2.5rem; 
+            color: #444; 
+            cursor: pointer; 
+            direction: rtl; 
+        }
+        
+        .interactive-stars i { 
+            transition: 0.2s; 
+        }
+        
+        .interactive-stars i:hover, 
+        .interactive-stars i:hover ~ i { 
+            color: var(--gold); 
+        }
+        
+        .interactive-stars i.selected, 
+        .interactive-stars i.selected ~ i { 
+            color: var(--gold); 
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="custom-cursor-dot" id="customCursorDot"></div>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div id="google_translate_element"></div>
+
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="close-lightbox">×</span>
+        <img id="lightboxImg" src="">
+    </div>
+
+
+
+
+
+
+
+    
+    <header id="main-header">
+        <div class="logo" onclick="switchPage('home')">
+            <img src="WhatsApp Image 2026-03-19 at 8.17.48 PM.jpeg"  class="header-logo">
+            APNA CENTRE
+        </div>
+        <nav class="nav-links">
+            <a onclick="switchPage('home')" class="nav-btn active-link" id="nav-home">Home</a>
+            <a onclick="switchPage('portfolio')" class="nav-btn" id="nav-portfolio">Portfolio</a>
+            <a onclick="switchPage('about')" class="nav-btn" id="nav-about">About Us</a>
+            <a onclick="switchPage('contact')" class="nav-btn" id="nav-contact">Contact & Track</a>
+            
+            <button class="header-btn" id="langToggleBtn" onclick="toggleLanguage()" style="margin-left: 10px;"><i class="fas fa-globe"></i> HINDI</button>
+            
+            <button class="header-btn" onclick="toggleHelpPanel()">Help & FAQ</button>
+        </nav>
+        <div class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars-staggered"></i></div>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <a onclick="switchPage('home'); toggleSidebar()"><i class="fas fa-home" style="margin-right:12px;"></i> Home</a>
+        <a onclick="switchPage('portfolio'); toggleSidebar()"><i class="fas fa-images" style="margin-right:12px;"></i> Portfolio</a>
+        <a onclick="switchPage('about'); toggleSidebar()"><i class="fas fa-user-tie" style="margin-right:12px;"></i> About Us</a>
+        <a onclick="switchPage('contact'); toggleSidebar()"><i class="fas fa-map-marker-alt" style="margin-right:12px;"></i> Contact & Track</a>
+        <a onclick="toggleLanguage(); toggleSidebar()" id="mobLangToggle"><i class="fas fa-globe" style="margin-right:12px;"></i> Hindi/English</a>
+        <a onclick="toggleHelpPanel(); toggleSidebar()"><i class="fas fa-question-circle" style="margin-right:12px;"></i> Help & FAQ</a>
+    </div>
+
+    <div id="home" class="page-section active">
+        
+        <section class="hero">
+            <h1>Apna Centre</h1>
+            <h2 style="display: inline-block; min-width: 280px;">Expert In <span id="typing-text"></span></h2>
+        </section>
+
+        <section class="container reveal">
+            <h2 class="section-title">Experience Our <span>Magic</span></h2>
+            <p style="text-align: center; color: var(--text-silver); margin-top: -30px; margin-bottom: 40px;">Slide left or right to see the magic of our Premium Editing.</p>
+            <div class="bna-container">
+                <img src="1111111.JPG" class="bna-img bna-before" alt="Before Edit">
+                <div class="bna-after-wrapper" id="bna-wrapper">
+                    <img src="1111111.JPG" class="bna-img bna-after" alt="After Edit">
+                </div>
+                <input type="range" min="0" max="100" value="50" class="bna-slider" id="bna-slider">
+                <div class="bna-labels">
+                    <span>RAW PHOTO</span>
+                    <span style="color: var(--gold); border-color: var(--gold);">FINAL EDIT</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="container reveal">
+            <h2 class="section-title">Our <span>Premium</span> Services</h2>
+            <div class="services-grid">
+                
+                <div class="card tilt-card glass-panel">
+                    <div class="card-inner">
+                        <img src="https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img" alt="Photography">
+                        <h3>Photography & Editing</h3>
+                        <p>Studio & Outdoor Shoots with professional retouching.</p>
+                        <div class="btn-group">
+                            <button class="btn btn-outline" onclick="openDemo('photo')">DEMO</button>
+                            <button class="btn btn-gold" onclick="openPackageModal('Photography & Editing')">ORDER NOW</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card tilt-card glass-panel">
+                    <div class="card-inner">
+                        <img src="1211/WhatsApp Image 2026-03-26 at 9.31.08 PM.jpeg" class="card-img" alt="Video">
+                        <h3>Video Editing</h3>
+                        <p>Cinematic Reels, YouTube Video Editing, and Wedding highlights.</p>
+                        <div class="btn-group">
+                            <button class="btn btn-outline" onclick="openDemo('video')">DEMO</button>
+                            <button class="btn btn-gold" onclick="openPackageModal('Video Editing')">ORDER NOW</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card tilt-card glass-panel">
+                    <div class="card-inner">
+                        <img src="1122/WhatsApp Image 2026-03-26 at 9.13.04 PM.jpeg" class="card-img" alt="Cyber">
+                        <h3>Cyber Services</h3>
+                        <p>Fast processing for Govt. Forms, Admit Cards, and Online Registrations.</p>
+                        <div class="btn-group">
+                            <button class="btn btn-outline" onclick="openDemo('cyber')">DEMO</button>
+                            <button class="btn btn-gold" onclick="openCyberOptionsModal()">ORDER NOW</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card tilt-card glass-panel">
+                    <div class="card-inner">
+                        <img src="1211/WhatsApp Image 2026-03-26 at 9.31.08 PM (1).jpeg" class="card-img" alt="Web">
+                        <h3>Website Design</h3>
+                        <p>Responsive & highly optimized Web Design for Business & E-commerce.</p>
+                        <div class="btn-group">
+                            <button class="btn btn-outline" onclick="openDemo('web')">DEMO</button>
+                            <button class="btn btn-gold" onclick="openPackageModal('Website Design')">ORDER NOW</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card tilt-card glass-panel">
+                    <div class="card-inner">
+                        <img src="1773318754159.png" class="card-img" alt="Data">
+                        <h3>Data Entry & MS Office</h3>
+                        <p>Expert in Excel, Word formatting, Copy-Paste work, and Virtual Assistance.</p>
+                        <div class="btn-group">
+                            <a href="https://www.fiverr.com/s/WERZvw7" target="_blank" style="flex:1; text-decoration:none;">
+                                <button class="btn btn-fiverr btn" style="width:100%;"><i class="fas fa-star"></i> FIVERR</button>
+                            </a>
+                            <button class="btn btn-gold" onclick="openDemo('data')">DEMO</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <section class="container reveal">
+            <h2 class="section-title">Smart <span>Cost Estimator</span></h2>
+            <p style="text-align: center; color: var(--text-silver); margin-top: -30px; margin-bottom: 40px;">Select your requirements to get an instant estimate.</p>
+            
+            <div class="calculator-wrapper glass-panel">
+                <div class="calc-group">
+                    <label>Select Service Type:</label>
+                    <select id="calcService" class="calc-select" onchange="calculatePrice()">
+                        <option value="99">Basic Video Editing (Reels/Shorts)</option>
+                        <option value="499">Cinematic Video Editing (YouTube/Vlog)</option>
+                        <option value="99">Photo Retouching (Per Photo)</option>
+                        <option value="599">Basic Website Design</option>
+                        <option value="149">Cyber Services (Form Fill/ID Apply)</option>
+                    </select>
+                </div>
+                
+                <div class="calc-group">
+                    <label>Delivery Speed:</label>
+                    <select id="calcSpeed" class="calc-select" onchange="calculatePrice()">
+                        <option value="1">Standard Delivery (2-3 Days)</option>
+                        <option value="1.5">Express Delivery (24 Hours) - 50% Extra</option>
+                        <option value="2">Urgent (Same Day) - Double Charge</option>
+                    </select>
+                </div>
+                
+                <div class="calc-result-box">
+                    <p class="calc-note">Estimated Total Cost</p>
+                    <div class="calc-price" id="calcTotalPrice">₹99</div>
+                    <p class="calc-note">*Final price may vary based on exact requirements.</p>
+                    
+                    <button class="btn btn-gold" style="width: 100%; padding: 15px; font-size: 1.1rem; margin-top: 10px;" onclick="sendCalcToWa()">
+                        <i class="fab fa-whatsapp"></i> SEND ESTIMATE TO CHANDAN SIR
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIVE CYBER UPDATES SECTION -->
+        <section class="container reveal">
+            <div class="glass-panel" style="border-radius: 30px; padding: 60px 30px;">
+                <h2 class="section-title" style="margin-bottom: 20px;">Live Cyber <span>Updates 2026</span></h2>
+                <div class="notice-grid">
+                    
+                    <!-- BOX 1: LATEST FORMS (CENTRAL & WB) -->
+                    <div class="notice-card tilt-card glass-panel">
+                        <div class="card-inner">
+                            <h3><i class="fas fa-edit"></i> Latest Govt Forms</h3>
+                            <ul class="notice-list">
+                                <li>
+                                    <a href="https://scvtwb.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">WB ITI Admission 2026</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Starts: May | Last Date: June</span>
+                                        </div>
+                                        <span class="blink-new">LIVE</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://webscte.co.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">JEXPO (WB Diploma)</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Last Date: 15 Apr 2026</span>
+                                        </div>
+                                        <span class="badge-date">Closing</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://ssc.gov.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">SSC GD Constable</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Last Date: 10 Jun 2026</span>
+                                        </div>
+                                        <span class="blink-new">APPLY</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://rrbcdg.gov.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">Railway Group D (1 Lakh+)</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Last Date: 20 May 2026</span>
+                                        </div>
+                                        <span class="blink-new">NEW</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- BOX 2: ADMIT CARDS & DATES -->
+                    <div class="notice-card tilt-card glass-panel">
+                        <div class="card-inner">
+                            <h3><i class="fas fa-id-card"></i> Admit Cards / City</h3>
+                            <ul class="notice-list">
+                                <li>
+                                    <a href="https://wbpolice.gov.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">WB Police Constable</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Exam: 25 Apr 2026</span>
+                                        </div>
+                                        <span class="blink-new">DOWNLOAD</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://wbbpe.org/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">WB Primary TET Admit</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Available Now</span>
+                                        </div>
+                                        <span class="badge-date">Link Open</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://ssc.gov.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">SSC CHSL Tier-1 City</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Check Status</span>
+                                        </div>
+                                        <span class="blink-new">LIVE</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://jeemain.nta.ac.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">JEE Main Phase 2</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">City Intimation Out</span>
+                                        </div>
+                                        <span class="badge-date">Active</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- BOX 3: RESULTS & SERVICES -->
+                    <div class="notice-card tilt-card glass-panel">
+                        <div class="card-inner">
+                            <h3><i class="fas fa-trophy"></i> Results & Services</h3>
+                            <ul class="notice-list">
+                                <li>
+                                    <a href="https://wbresults.nic.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">WB Madhyamik Result</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Expected: May 2026</span>
+                                        </div>
+                                        <span class="badge-date">Soon</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://wbresults.nic.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">WBCHSE HS Result</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Expected: May 2026</span>
+                                        </div>
+                                        <span class="badge-date">Soon</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://pmkisan.gov.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">PM Kisan 17th Installment</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">e-KYC Mandatory</span>
+                                        </div>
+                                        <span class="blink-new">URGENT</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://eportal.incometax.gov.in/" target="_blank">
+                                        <div>
+                                            <span style="color: white;">PAN - Aadhar Link Status</span><br>
+                                            <span style="font-size: 0.75rem; color: var(--gold);">Check Online</span>
+                                        </div>
+                                        <span class="badge-date">Check</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="container reveal" style="padding-bottom: 100px;">
+            <h2 class="section-title">What Our <span>Clients Say</span></h2>
+            <div class="testimonials-grid">
+                <div class="testi-card tilt-card glass-panel">
+                    <div class="card-inner">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testi-text">"Chandan is amazing! The cinematic video editing he did for my YouTube channel was beyond my expectations. Highly recommended!"</p>
+                        <div class="testi-client">
+                            <img src="1211/IMG20250802132635 (1).jpg" class="client-img" alt="Client">
+                            <div class="client-info">
+                                <h4>Ankit Raj</h4>
+                                <span>YouTuber</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card tilt-card glass-panel">
+                    <div class="card-inner">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testi-text">""Brother, thank you so much for filling out my Agniveer form! You made things so much easier for me. Now just pray that I clear the recruitment. Thanks, man!!"</p>
+                        <div class="testi-client">
+                            <img src="viraj (1).jpeg" class="client-img" alt="Client">
+                            <div class="client-info">
+                                <h4> Viraj kumar </h4>
+                                <span>Student</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card tilt-card glass-panel">
+                    <div class="card-inner">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <p class="testi-text">"Great data entry work provided through Fiverr. Error-free excel sheets and delivered before the deadline. Will hire again."</p>
+                        <div class="testi-client">
+                            <img src="https://randomuser.me/api/portraits/men/85.jpg" class="client-img" alt="Client">
+                            <div class="client-info">
+                                <h4>David Miller</h4>
+                                <span>Fiverr Client (USA)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        </div>
+
+    <div id="portfolio" class="page-section">
+        <section class="container" style="padding-top: 150px; min-height: 80vh;">
+            <h2 class="section-title">Our Premium <span>Gallery</span></h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item tilt-card glass-panel" onclick="showZoom('https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=800')">
+                    <img src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=500">
+                    <div class="portfolio-overlay"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="portfolio-item tilt-card glass-panel" onclick="showZoom('https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=800')">
+                    <img src="1211/IMG20250802132635 (1).jpg">
+                    <div class="portfolio-overlay"><i class="fas fa-search-plus"></i></div>
+                </div>
+
+
+
+
+
+                <div class="portfolio-item tilt-card glass-panel" onclick="showZoom('https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=800')">
+                    <img src="https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=500">
+                    <div class="portfolio-overlay"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="portfolio-item tilt-card glass-panel" onclick="showZoom('https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=800')">
+                    <img src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=500">
+                    <div class="portfolio-overlay"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="portfolio-item tilt-card glass-panel" onclick="showZoom('https://images.pexels.com/photos/196646/pexels-photo-196646.jpeg?auto=compress&cs=tinysrgb&w=800')">
+                    <img src="https://images.pexels.com/photos/196646/pexels-photo-196646.jpeg?auto=compress&cs=tinysrgb&w=500">
+                    <div class="portfolio-overlay"><i class="fas fa-search-plus"></i></div>
+                </div>
+                <div class="portfolio-item tilt-card glass-panel" onclick="showZoom('https://images.pexels.com/photos/1382731/pexels-photo-1382731.jpeg?auto=compress&cs=tinysrgb&w=800')">
+                    <img src="https://images.pexels.com/photos/1382731/pexels-photo-1382731.jpeg?auto=compress&cs=tinysrgb&w=500">
+                    <div class="portfolio-overlay"><i class="fas fa-search-plus"></i></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="about" class="page-section">
+        <section class="container" style="padding-top: 150px; min-height: 80vh;">
+            <h2 class="section-title">The Story Behind <span>Apna Centre</span></h2>
+            <div class="about-grid glass-panel">
+                <div>
+                    <img src="1211/Picsart_23-07-10_20-54-41-880.jpg" style="width:100%; border-radius: 20px; border: 2px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.8);" alt="Team Work">
+                </div>
+                <div class="about-text">
+                    <h3>Who We Are</h3>
+                    <p>Founded by <strong>Chandan Singh</strong>, Apna Centre started with a vision to provide top-notch digital solutions under one roof. Today, we are a trusted name for creative video editing, stunning photography, and reliable cyber services.</p>
+                    <div style="display: flex; gap: 20px; margin-top: 30px;">
+                        <div style="text-align:center;">
+                            <h4 style="color:var(--gold); font-size:2rem;">50+</h4>
+                            <span style="font-size:0.8rem; color:#888;">HAPPY CLIENTS</span>
+                        </div>
+                        <div style="text-align:center;">
+                            <h4 style="color:var(--gold); font-size:2rem;">+</h4>
+                            <span style="font-size:0.8rem; color:#888;">YEARS EXP.</span>
+                        </div>
+                        <div style="text-align:center;">
+                            <h4 style="color:var(--gold); font-size:2rem;">24/7</h4>
+                            <span style="font-size:0.8rem; color:#888;">SUPPORT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="contact" class="page-section">
+        <section class="container" style="padding-top: 150px; min-height: 80vh;">
+            
+            <h2 class="section-title">Track Your <span>Order</span></h2>
+            <div class="tracker-container glass-panel">
+                <p style="color:#ccc; margin-bottom: 30px;">Enter your unique Order ID to fetch live status from our secure database.</p>
+                
+                <div class="tracker-input-group">
+                    <input type="text" id="trackInput" class="tracker-input" placeholder="e.g. APNA101">
+                    <button class="btn btn-gold" style="flex:none; padding: 15px 30px;" onclick="trackMyOrder()">
+                        <i class="fas fa-search"></i> Track
+                    </button>
+                </div>
+                
+                <div id="trackerLoader" class="loader"></div>
+                
+                <div id="trackerErrorBox" class="tracker-error-box glass-panel" style="background: rgba(255,0,0,0.4); border-color: red;">
+                    <p id="errorTxt" style="color: #ff2a2a; font-weight: bold; margin-bottom: 10px;">ID Not Found!</p>
+                    <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 15px;">Can't find your status? Ask us directly on WhatsApp.</p>
+                    <button class="btn btn-outline" style="border-color: red; color: red;" onclick="requestStatusWa()">
+                        <i class="fab fa-whatsapp"></i> Request Status
+                    </button>
+                </div>
+
+                <div class="tracker-steps" id="trackerUI">
+                    <div class="tracker-line"></div>
+                    <div class="tracker-progress" id="trackerProgress"></div>
+                    
+                    <div class="step" id="step1">
+                        <div class="step-icon"><i class="fas fa-clipboard-list"></i></div>
+                        <div class="step-text">Received</div>
+                    </div>
+                    <div class="step" id="step2">
+                        <div class="step-icon"><i class="fas fa-laptop-code"></i></div>
+                        <div class="step-text">In Progress</div>
+                    </div>
+                    <div class="step" id="step3">
+                        <div class="step-icon"><i class="fas fa-check-double"></i></div>
+                        <div class="step-text">Finalizing</div>
+                    </div>
+                    <div class="step" id="step4">
+                        <div class="step-icon"><i class="fas fa-box-open"></i></div>
+                        <div class="step-text">Delivered</div>
+                    </div>
+                </div>
+
+                <div id="deliveredFeedbackBox" style="display: none; margin-top: 50px; padding-top: 30px; border-top: 1px dashed rgba(255,215,0,0.3);">
+                    <h3 style="color: var(--gold); font-size: 1.5rem; margin-bottom: 10px;">Order Completed! 🎉</h3>
+                    <p style="color: #ccc; font-size: 0.95rem; margin-bottom: 20px;">Thank you for choosing Apna Centre. Please share your experience with us.</p>
+                    <button class="btn btn-outline" style="padding: 15px 30px; font-size: 1rem; border-color: var(--gold); color: var(--gold);" onclick="openReviewModal()">
+                        <i class="fas fa-star"></i> Rate Your Experience
+                    </button>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 80px;">Get In <span>Touch</span></h2>
+            <div class="contact-grid">
+                <div class="glass-panel" style="border-radius: 20px; overflow: hidden; padding:0;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d116960.27847987019!2d86.89966579679152!3d23.683377264858927!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f71f0ea1022529%3A0xf888f7e7fd11cefe!2sAsansol%2C%20West%20Bengal!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0; min-height: 350px;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="contact-card tilt-card glass-panel">
+                        <div class="card-inner">
+                            <i class="fas fa-phone-alt"></i>
+                            <h4>Call or WhatsApp Us</h4>
+                            <p>+91 8986993592</p>
+                            <button class="btn btn-outline" style="margin-top:15px;" onclick="window.open('https://api.whatsapp.com/send?phone=918986993592','_blank')">Message Now</button>
+                        </div>
+                    </div>
+                    <div class="contact-card tilt-card glass-panel">
+                        <div class="card-inner">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h4>Our Location</h4>
+                            <p>Apna Centre, Asansol, WB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="owner-section reveal" id="owner">
+        <h2 class="section-title" style="font-size: 2.5rem; margin-bottom: 50px;">Meet The <span>Founder</span></h2>
+        <div class="owner-card tilt-card glass-panel">
+            <div class="card-inner">
+                <div class="owner-badge">CEO & FOUNDER</div>
+                <img src="chandan (1).jpg" class="profile-pic" alt="Chandan Singh">
+                <h2 style="color:var(--gold); font-family:'Playfair Display'; font-size: 2rem; margin-bottom:8px;">Chandan Singh</h2>
+                <p style="color:#aaa; font-size:0.95rem; letter-spacing:2px; margin-bottom:25px; text-transform:uppercase;">Apna Centre</p>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt" style="color:var(--gold)"></i> Asansol, West Bengal</p>
+                    <p><i class="fas fa-phone-alt" style="color:var(--gold)"></i> +91 8986993592</p>
+                    <p><i class="fas fa-envelope" style="color:var(--gold)"></i> chandansingh23713@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3 style="font-size: 1.8rem; font-family:'Space Grotesk', serif;">APNA <span style="color:white;">CENTRE</span></h3>
+                <p>Your one-stop destination for premium digital services. We blend creativity with technology to deliver stunning results.</p>
+                <div class="footer-socials">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.fiverr.com/s/WERZvw7" target="_blank"><i class="fas fa-briefcase"></i></a>
+                    <a href="https://api.whatsapp.com/send?phone=918986993592" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Nav</h3>
+                <ul class="footer-links">
+                    <li><a onclick="switchPage('home')">Home</a></li>
+                    <li><a onclick="switchPage('portfolio')">Portfolio</a></li>
+                    <li><a onclick="switchPage('about')">About Us</a></li>
+                    <li><a onclick="switchPage('contact')">Track Order</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Our Services</h3>
+                <ul class="footer-links">
+                    <li><a onclick="openPackageModal('Photography & Editing')">Photography</a></li>
+                    <li><a onclick="openPackageModal('Video Editing')">Video Editing</a></li>
+                    <li><a onclick="openPackageModal('Website Design')">Web Design</a></li>
+                    <li><a onclick="openOrder('Data Entry & MS Office')">Data Entry</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 <span>Apna Centre</span>. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div class="floating-btns">
+        <a href="https://api.whatsapp.com/send?phone=918986993592" class="float-btn whatsapp-float" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="tel:+918986993592" class="float-btn call-float">
+            <i class="fas fa-phone"></i>
+        </a>
+    </div>
+
+    <div class="help-float-btn" onclick="toggleHelpPanel()">
+        <i class="fas fa-question"></i>
+    </div>
+
+    <div class="help-panel glass-panel" id="helpPanel">
+        <div class="help-header" style="background: rgba(0,0,0,0.4);">
+            <h3><i class="fas fa-robot"></i> Help Desk (Auto-Reply)</h3>
+            <i class="fas fa-times close-help" onclick="toggleHelpPanel()"></i>
+        </div>
+        
+        <div class="chat-body" id="chatBody">
+            <div class="chat-msg bot-msg">
+                Namaste! Main Apna Centre ka digital assistant hoon. Aap apna sawal neeche type kar sakte hain, ya diye gaye options chunein:
+            </div>
+            <div class="chat-quick-options">
+                <button class="quick-btn" onclick="sendQuickReply('PAN Card documents?')">PAN Card</button>
+                <button class="quick-btn" onclick="sendQuickReply('Kitna time lagega?')">Delivery Time</button>
+                <button class="quick-btn" onclick="sendQuickReply('Payment kaise karu?')">Payment</button>
+                <button class="quick-btn" onclick="sendQuickReply('Website cost?')">Website Cost</button>
+            </div>
+        </div>
+        
+        <div class="chat-input-area" style="background: rgba(0,0,0,0.4);">
+            <input type="text" id="chatInput" class="chat-input" style="background:rgba(0,0,0,0.6);" placeholder="Type your question..." onkeypress="handleChatEnter(event)">
+            <button class="chat-send-btn" onclick="handleUserMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="demoModal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <span class="close-btn" onclick="closeModals()">×</span>
+            <h3 id="demoTitle" class="modal-title">Demo</h3>
+            <div id="demoChecklist" class="checklist" style="margin-bottom:20px; color:#ccc;"></div>
+            <h4 style="color:var(--gold); text-align:center; font-size:0.9rem; letter-spacing: 2px;">SAMPLE WORK</h4>
+            <div id="demoGallery" class="demo-gallery"></div>
+        </div>
+    </div>
+    
+    <div id="packageModal" class="modal-overlay">
+        <div class="modal-box glass-panel" style="max-width: 650px;">
+            <span class="close-btn" onclick="closeModals()">×</span>
+            <h3 class="modal-title" style="margin-bottom: 10px;">Select Your Package</h3>
+            <p id="packageServiceTitle" style="text-align: center; color: var(--text-silver); font-size: 0.95rem; margin-bottom: 25px;">For: Service Name</p>
+            
+            <div class="package-options">
+                <div class="pkg-card glass-panel" onclick="selectPackage('Basic Plan', '₹499')">
+                    <h4>Basic</h4>
+                    <div class="pkg-price">₹99</div>
+                    <button class="pkg-btn">Select</button>
+                </div>
+                <div class="pkg-card glass-panel pro" onclick="selectPackage('Pro Plan', '₹999')">
+                    <div style="position: absolute; top:0; left:50%; transform:translate(-50%, -50%); background:var(--gold); color:black; font-size:0.7rem; font-weight:bold; padding:2px 10px; border-radius:10px;">POPULAR</div>
+                    <h4>Pro</h4>
+                    <div class="pkg-price">₹299</div>
+                    <button class="pkg-btn">Select</button>
+                </div>
+                <div class="pkg-card glass-panel" onclick="selectPackage('Premium Plan', '₹1999')">
+                    <h4>Premium</h4>
+                    <div class="pkg-price">₹999</div>
+                    <button class="pkg-btn">Select</button>
+                </div>
+            </div>
+            <p style="text-align: center; font-size: 0.8rem; color: #666; margin-top: 20px;">*You can discuss and change the package later on WhatsApp too.</p>
+        </div>
+    </div>
+
+    <div id="cyberOptionsModal" class="modal-overlay">
+        <div class="modal-box glass-panel" style="max-width: 650px;">
+            <span class="close-btn" onclick="closeModals()">×</span>
+            <h3 class="modal-title" style="margin-bottom: 10px;">Select Cyber Service</h3>
+            <p style="text-align: center; color: var(--text-silver); font-size: 0.95rem; margin-bottom: 25px;">What do you need help with?</p>
+            
+            <div class="cyber-options-grid">
+                <div class="cyber-opt-card glass-panel" onclick="selectCyberOption('PAN Card Apply / Correction')">
+                    <i class="fas fa-id-card"></i>
+                    <h4>PAN Card</h4>
+                </div>
+                <div class="cyber-opt-card glass-panel" onclick="selectCyberOption('Aadhar Card Update / Print')">
+                    <i class="fas fa-fingerprint"></i>
+                    <h4>Aadhar Card</h4>
+                </div>
+                <div class="cyber-opt-card glass-panel" onclick="selectCyberOption('Govt. Job Form Fill')">
+                    <i class="fas fa-file-signature"></i>
+                    <h4>Govt. Job Form</h4>
+                </div>
+                <div class="cyber-opt-card glass-panel" onclick="selectCyberOption('Voter ID Apply / Correction')">
+                    <i class="fas fa-address-card"></i>
+                    <h4>Voter ID</h4>
+                </div>
+                <div class="cyber-opt-card glass-panel" onclick="selectCyberOption('Admit Card / Result Print')">
+                    <i class="fas fa-print"></i>
+                    <h4>Admit Card/Result</h4>
+                </div>
+                <div class="cyber-opt-card glass-panel" onclick="selectCyberOption('PF Withdrawal / Services')">
+                    <i class="fas fa-piggy-bank"></i>
+                    <h4>PF Services</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="orderModal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <span class="close-btn" onclick="closeModals()">×</span>
+            <h3 class="modal-title">Place Your Order</h3>
+            <input type="text" id="serviceInput" class="form-control" readonly style="color:var(--gold); font-weight:800; background: rgba(0,0,0,0.6); text-align: center;">
+            <input type="text" id="nameInput" class="form-control" placeholder="Enter Your Name">
+            <textarea id="detailsInput" class="form-control" rows="4" placeholder="Briefly describe what you need..."></textarea>
+            <button class="btn btn-gold" style="width:100%; font-size: 1.1rem; padding: 18px; margin-top: 10px;" onclick="sendWhatsapp()">
+                <i class="fab fa-whatsapp"></i> SEND DETAILS
+            </button>
+        </div>
+    </div>
+
+    <div id="cyberInfoModal" class="modal-overlay">
+        <div class="modal-box glass-panel" style="max-width: 500px;">
+            <span class="close-btn" onclick="closeModals()">×</span>
+            <h3 id="cyberTitle" class="modal-title" style="font-size: 1.5rem; line-height: 1.4;">Alert Title</h3>
+            <div class="info-detail">
+                <p><span><i class="fas fa-calendar-alt"></i> Dates:</span> <br> <span id="cyberDates" style="color:#fff;">...</span></p>
+            </div>
+            <div class="info-detail">
+                <p><span><i class="fas fa-money-bill-wave"></i> Fee:</span> <br> <span id="cyberFee" style="color:#fff;">...</span></p>
+            </div>
+            <div class="info-detail">
+                <p><span><i class="fas fa-user-graduate"></i> Eligibility:</span> <br> <span id="cyberEligibility" style="color:#fff;">...</span></p>
+            </div>
+            <button class="btn btn-gold" id="cyberOrderBtn" style="width:100%; font-size: 1.1rem; padding: 16px;">
+                <i class="fab fa-whatsapp"></i> PROCEED ON WHATSAPP
+            </button>
+        </div>
+    </div>
+
+    <div id="reviewModal" class="modal-overlay">
+        <div class="modal-box glass-panel" style="max-width: 450px;">
+            <span class="close-btn" onclick="closeModals()">×</span>
+            <h3 class="modal-title" style="font-size: 1.6rem;">Rate Your Experience</h3>
+            <p style="text-align: center; color: #ccc; margin-bottom: 10px;">Select Stars</p>
+            
+            <div class="interactive-stars" id="starContainer">
+                <i class="fas fa-star" data-val="5" onclick="setRating(5)"></i>
+                <i class="fas fa-star" data-val="4" onclick="setRating(4)"></i>
+                <i class="fas fa-star" data-val="3" onclick="setRating(3)"></i>
+                <i class="fas fa-star" data-val="2" onclick="setRating(2)"></i>
+                <i class="fas fa-star" data-val="1" onclick="setRating(1)"></i>
+            </div>
+            
+
+            
+            <input type="hidden" id="ratingValue" value="5">
+            
+            <select id="reviewService" class="form-control" style="background: rgba(0,0,0,0.5); color: #fff;">
+                <option value="" disabled selected>Select Service You Used</option>
+                <option value="Photography & Editing">Photography & Editing</option>
+                <option value="Video Editing">Video Editing</option>
+                <option value="Cyber Services">Cyber Services</option>
+                <option value="Website Design">Website Design</option>
+                <option value="Data Entry & Excel">Data Entry & Excel</option>
+            </select>
+            
+            <input type="text" id="reviewerName" class="form-control" placeholder="Your Name">
+            <input type="email" id="reviewerEmail" class="form-control" placeholder="Your Email ID (For Verification)">
+            <textarea id="reviewerText" class="form-control" rows="4" placeholder="Write your review here..."></textarea>
+            
+            <button class="btn btn-gold" style="width:100%; font-size: 1.1rem; padding: 15px;" onclick="submitReview()">
+                <i class="fas fa-paper-plane"></i> Submit Feedback
+            </button>
+            <p style="text-align: center; font-size: 0.8rem; color: #666; margin-top: 10px;">This will be securely sent to Admin via Google Sheets for verification.</p>
+        </div>
+    </div>
+
+    <div id="exitPopup" class="modal-overlay" style="z-index: 9999;">
+        <div class="modal-box glass-panel" style="max-width: 420px; text-align: center; padding: 40px 25px;">
+            <span class="close-btn" onclick="closeExitPopup()">×</span>
+            <h2 style="color: var(--gold); font-size: 3.5rem; margin-bottom: 10px; animation: pulse-gold 1.5s infinite;"><i class="fas fa-gift"></i></h2>
+            <h3 class="modal-title" style="border: none; padding: 0; margin-bottom: 10px;">WAIT! Don't Leave Yet!</h3>
+            <p style="color: #ccc; margin-bottom: 20px; font-size: 1.05rem;">Get a <strong style="color:white;">10% DISCOUNT</strong> on your first order. Take a screenshot of this code:</p>
+            <div style="background: rgba(255,215,0,0.1); border: 2px dashed var(--gold); padding: 15px; font-size: 1.8rem; font-weight: 800; color: var(--gold); margin-bottom: 25px; letter-spacing: 4px; border-radius: 10px;">APNA CENTRE</div>
+            <button class="btn btn-gold" style="width: 100%; padding: 16px; font-size: 1.1rem;" onclick="claimDiscount()">CLAIM DISCOUNT NOW</button>
+            <p style="color: #666; font-size: 0.8rem; margin-top: 15px; cursor: pointer;" onclick="closeExitPopup()">No thanks, I'll pay full price</p>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'hi,en', autoDisplay: false}, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        // 1. MULTI-PAGE SYSTEM (SPA LOGIC)
+        function switchPage(pageId) { 
+            document.querySelectorAll('.page-section').forEach(page => { 
+                page.classList.remove('active'); 
+            }); 
+            
+            document.getElementById(pageId).classList.add('active'); 
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active-link');
+            }); 
+            
+            if(document.getElementById('nav-' + pageId)) { 
+                document.getElementById('nav-' + pageId).classList.add('active-link'); 
+            } 
+            
+            window.scrollTo(0, 0); 
+        }
+
+        // ==========================================================================
+        // 2. GOOGLE SHEETS LIVE ORDER TRACKER LOGIC
+        // ==========================================================================
+        
+        // ⚠️ YAHAN AAPKO APNA GOOGLE SCRIPT URL DALNA HAI:
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbxOTTBmXl0jjJVnTcFELo0aGOeoYfP0yKYvlpjPvFmde80MW-gzjxJ3pF-_s_w2b3-G/exec'; 
+
+        async function trackMyOrder() {
+            const inputVal = document.getElementById('trackInput').value.trim().toUpperCase();
+            const errorBox = document.getElementById('trackerErrorBox');
+            const errorTxt = document.getElementById('errorTxt');
+            const trackerUI = document.getElementById('trackerUI');
+            const progressBar = document.getElementById('trackerProgress');
+            const feedbackBox = document.getElementById('deliveredFeedbackBox');
+            const loader = document.getElementById('trackerLoader');
+            
+            if(!inputVal) { 
+                alert("Please enter Tracking ID"); 
+                return; 
+            }
+
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('completed'));
+            feedbackBox.style.display = 'none'; 
+            feedbackBox.classList.remove('active', 'reveal');
+            errorBox.style.display = 'none';
+            trackerUI.classList.remove('active');
+            loader.style.display = 'block'; 
+
+            try {
+                const response = await fetch(`${scriptUrl}?orderId=${inputVal}`);
+                const data = await response.json();
+                
+                loader.style.display = 'none'; 
+
+                if(data.found) {
+                    trackerUI.classList.add('active');
+                    
+                    let stepCount = 1; 
+                    if(data.status.toLowerCase().includes('progress')) stepCount = 2;
+                    if(data.status.toLowerCase().includes('final')) stepCount = 3;
+                    if(data.status.toLowerCase().includes('deliver')) stepCount = 4;
+                    
+                    if(stepCount === 1) progressBar.style.width = '0%'; 
+                    if(stepCount === 2) progressBar.style.width = '33%'; 
+                    if(stepCount === 3) progressBar.style.width = '66%'; 
+                    if(stepCount === 4) progressBar.style.width = '100%';
+                    
+                    setTimeout(() => { document.getElementById('step1').classList.add('completed'); }, 300); 
+                    if(stepCount >= 2) setTimeout(() => { document.getElementById('step2').classList.add('completed'); }, 800); 
+                    if(stepCount >= 3) setTimeout(() => { document.getElementById('step3').classList.add('completed'); }, 1300); 
+                    
+                    if(stepCount === 4) {
+                        setTimeout(() => { document.getElementById('step4').classList.add('completed'); }, 1800); 
+                        setTimeout(() => { 
+                            feedbackBox.style.display = 'block'; 
+                            feedbackBox.classList.add('reveal', 'active'); 
+                        }, 2400);
+                    }
+                } else {
+                    errorTxt.innerText = "ID Not Found in Database!";
+                    errorBox.style.display = 'block';
+                }
+            } catch(e) {
+                loader.style.display = 'none';
+                
+                const dummyDB = { 'APNA123': 2, 'CHANDAN01': 4 };
+                
+                if(dummyDB[inputVal]) {
+                    trackerUI.classList.add('active');
+                    let step = dummyDB[inputVal];
+                    
+                    if(step === 1) progressBar.style.width = '0%'; 
+                    if(step === 2) progressBar.style.width = '33%'; 
+                    if(step === 3) progressBar.style.width = '66%'; 
+                    if(step === 4) progressBar.style.width = '100%';
+                    
+                    setTimeout(() => { document.getElementById('step1').classList.add('completed'); }, 300); 
+                    if(step >= 2) setTimeout(() => { document.getElementById('step2').classList.add('completed'); }, 800); 
+                    if(step >= 3) setTimeout(() => { document.getElementById('step3').classList.add('completed'); }, 1300); 
+                    
+                    if(step === 4) {
+                        setTimeout(() => { document.getElementById('step4').classList.add('completed'); }, 1800); 
+                        setTimeout(() => { 
+                            feedbackBox.style.display = 'block'; 
+                            feedbackBox.classList.add('reveal', 'active'); 
+                        }, 2400);
+                    }
+                } else {
+                    errorTxt.innerText = "(Demo Mode) Try APNA123 or CHANDAN01";
+                    errorBox.style.display = 'block';
+                }
+            }
+        }
+
+        function requestStatusWa() {
+            const id = document.getElementById('trackInput').value.trim() || 'Unknown ID';
+            const textMsg = `Hello Apna Centre,%0A%0AI want to know the status of my order.%0A*My Tracking ID is:* ${id}%0APlease check and let me know.`;
+            window.open(`https://api.whatsapp.com/send?phone=918986993592&text=${textMsg}`, '_blank');
+        }
+
+        // ==========================================================================
+        // 3. SMART OFFLINE CHATBOT LOGIC (Massive Keyword Database)
+        // ==========================================================================
+        function toggleHelpPanel() {
+            const panel = document.getElementById('helpPanel');
+            panel.classList.toggle('active');
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const botKnowledge = [
+    // ==========================================
+    // PURANE WALE (ORIGINAL) JO AAPNE DIYE THE
+    // ==========================================
+    { keywords: ["hi", "hello", "hey", "namaste", "pranam", "good morning", "good evening", "gm", "ge", "kaise ho", "kya haal"], answer: "Namaste! Apna Centre mein aapka swagat hai. Main aapka digital assistant hoon. Batayein, main aapki kya madad kar sakta hoon?" },
+    { keywords: ["kaun ho", "tumhara naam", "who are you", "bot", "assistant", "robot"], answer: "Main Apna Bot hoon! Chandan Sir ne mujhe banaya hai taaki main aapko turant jankari de saku." },
+    { keywords: ["thank you", "thanks", "dhanyawad", "shukriya", "ok", "acha"], answer: "Aapka swagat hai! Agar aur koi sawal ho toh zaroor poochein." },
+    { keywords: ["address", "kaha ho", "location", "shop", "center kahan", "asansol", "dukaan kahan"], answer: "Humari agency Apna Centre Asansol, West Bengal mein sthit hai. Exact Google Map location menu mein 'Contact & Track' page par hai." },
+    { keywords: ["time", "timing", "open", "close", "kab khulega", "sunday", "chutti", "holiday"], answer: "Humari online services aur WhatsApp support 24/7 available hai. Studio/Dukaan visit karne ke liye please pehle appointment le lein." },
+    { keywords: ["owner", "chandan", "boss", "sir se baat", "admin", "number do", "call", "contact"], answer: "Apna Centre ke founder Chandan Singh hain. Aap unse direct +91 8986993592 par call ya WhatsApp ke zariye baat kar sakte hain." },
+    { keywords: ["pay", "payment", "upi", "phonepe", "gpay", "paytm", "qr code", "cash", "advance", "paisa"], answer: "Aapko 50% payment advance karni hogi, aur baaki 50% kaam poora hone ke baad. Hum sabhi UPI apps accept karte hain. Scanner WhatsApp par mil jayega." },
+    { keywords: ["discount", "sasta", "kam karo", "offer", "price kam", "rate", "kitna lagega"], answer: "Sir, humari pricing website par transparent hai. Phir bhi agar aapka bulk order (bada project) hai, toh WhatsApp par humse baat karein." },
+    { keywords: ["refund", "cancel", "wapas", "paise wapas"], answer: "Agar kaam shuru nahi hua hai toh advance 100% refund ho jayega. Kaam shuru hone ke baad refund nahi hota, par hum tab tak correction karenge jab tak aap satisfy na ho jayein." },
+    { keywords: ["track", "status", "mera order", "kab milega", "kaha pahucha", "delivery time", "late"], answer: "Aap menu mein 'Contact & Track' page par jaakar apna Tracking ID (jaise APNA101) daal kar live status dekh sakte hain. Normal delivery 24-48 hours me hoti hai." },
+    { keywords: ["pan", "pancard", "new pan", "pan update", "pan correction", "nsdl", "uti", "lost pan"], answer: "PAN Card naya banwane ya correction ke liye Aadhar Card aur 1 Passport photo chahiye. Government fee ₹107 hai + humara processing charge ₹50. 7-10 din me email pe aa jata hai." },
+    { keywords: ["aadhar", "adhar", "uidai", "update aadhar", "mobile link", "pvc", "aadhar print"], answer: "Aadhar Card PDF print aur PVC card order hum kar denge. Lekin mobile number link, photo ya fingerprint update ke liye aapko original documents ke sath nearest Aadhar Center hi jana padega." },
+    { keywords: ["voter", "voter id", "epic", "new voter", "voter card", "pehchan patra"], answer: "New Voter ID apply karne ke liye minimum 18 years age honi chahiye. Documents required: Aadhar Card, Photo, aur family ke kisi member ka Voter ID reference ke liye." },
+    { keywords: ["passport", "tatkal passport", "visa", "psk"], answer: "Passport apply karne ke liye Aadhar, PAN, aur 10th ki marksheet lagti hai. Hum online form bhar kar aapko appointment date dila denge." },
+    { keywords: ["ration card", "rashan", "ration update"], answer: "Ration card me naya naam jodne ya correction ke liye family head ka aadhar, jiska naam jodna hai uska aadhar, aur purana ration card chahiye." },
+    { keywords: ["income", "caste", "domicile", "jati", "niwas", "aay praman", "residential"], answer: "Jati (Caste), Aay (Income), aur Niwas (Domicile) praman patra banwane ke liye Aadhar, Photo aur Ward/Panchayat ka praman lagta hai. Ban ne mein 10-15 din lagte hain." },
+    { keywords: ["pf", "epf", "uan", "pf withdrawal", "pension", "pf claim"], answer: "PF Withdrawal ke liye aapka UAN activate hona chahiye, aur usme Aadhar, PAN, aur Bank account (IFSC ke sath) link hona zaroori hai. Hum online claim kar denge." },
+    { keywords: ["kisan", "pm kisan", "kyc", "samman nidhi"], answer: "PM Kisan e-KYC ya new registration ke liye aapka Aadhar card, Bank passbook, aur Zameen ki raseed (LPC) chahiye. Aadhar me mobile number link hona zaroori hai." },
+    { keywords: ["form fill", "online form", "vacancy", "sarkari naukri", "govt job"], answer: "Kisi bhi Govt Job ka form bharwane ke liye aapko 10th/12th/Graduation marksheet, Aadhar, aur Passport size photo bhejna hoga. Humara form fill charge ₹50 se ₹100 hai." },
+    { keywords: ["ssc", "cgl", "chsl", "mts", "gd"], answer: "SSC ke kisi bhi form ke liye aapka OTR (One Time Registration) hona zaroori hai. Agar OTR nahi hai toh Aadhar aur 10th details bhejein, hum kar denge." },
+    { keywords: ["railway", "rrb", "ntpc", "alp", "technician"], answer: "Railway exams ke liye photo aur signature ekdum clear hone chahiye. Form fees aam taur par ₹500 (Gen/OBC) aur ₹250 (SC/ST) hoti hai jisme exam ke baad refund milta hai." },
+    { keywords: ["bank", "ibps", "sbi", "clerk", "po"], answer: "Banking forms mein photo, signature, left thumb impression aur hand-written declaration lagta hai. Hum format bhej denge, aap likh kar photo bhej dijiyega." },
+    { keywords: ["police", "army", "navy", "airforce", "nda", "defence"], answer: "Defence aur Police vacancy ke physical details (Height/Weight) aapko form bharte waqt batane honge. Documents WhatsApp par share karein." },
+    { keywords: ["admit card", "hall ticket", "exam date", "city intimation"], answer: "Admit Card nikalne ke liye apna Registration Number/Roll Number aur Date of Birth taiyar rakhein aur WhatsApp karein. Hum PDF bhej denge." },
+    { keywords: ["result", "sarkari result", "marksheet", "score card", "cut off"], answer: "Result check karne ke liye apna Roll Number ya Login ID bhejein. Hum turant check karke aapko PDF bhej denge." },
+    { keywords: ["photo", "photoshoot", "indoor", "outdoor", "portrait", "modeling", "portfolio"], answer: "Humare paas Basic se lekar Premium photoshoot available hain. Outdoor aur Indoor dono setup mil jayenge. Detail discuss karne ke liye WhatsApp karein." },
+    { keywords: ["wedding photo", "pre wedding", "shaadi", "haldi", "mehndi", "album", "karizma"], answer: "Shaadi, Pre-wedding, aur events ke liye humari puri team book ki ja sakti hai. Cinematic video aur premium Karizma album dono banaye jate hain. Dates confirm karne ke liye WhatsApp karein." },
+    { keywords: ["passport size", "urgent photo", "print out", "xerox", "lamination", "frame"], answer: "Urgent passport size photo, photo framing, aur lamination ki suvidha bhi humare centre par upalabdh hai." },
+    { keywords: ["retouching", "background remove", "old photo", "photo edit"], answer: "Purani (damaged) photo ko naya karna, background change karna, aur high-end skin retouching ka kaam hum professional level par karte hain." },
+    { keywords: ["video", "video edit", "vlog", "edit karna hai"], answer: "Video Editing ke liye humare paas Cinematic transitions aur color grading wale plans hain. Normal editing bhi available hai." },
+    { keywords: ["youtube", "youtuber", "thumbnail"], answer: "YouTube videos ke liye hum engaging editing, sound design, aur eye-catching Thumbnails banate hain taaki aapke views badhein." },
+    { keywords: ["reel", "shorts", "instagram", "tiktok"], answer: "Instagram Reels aur YouTube Shorts ke liye hum captions (subtitles), trending music aur fast-paced editing use karte hain. Bulk order pe special discount hai." },
+    { keywords: ["wedding video", "birthday video", "promo", "teaser", "invitation"], answer: "Wedding highlights, Birthday cinematic video, aur digital Video Invitations hum bahut creative tareeke se banate hain. Demo website par dekh sakte hain." },
+    { keywords: ["website", "web design", "domain", "hosting", "business site", "seo"], answer: "Website Design ka Premium Plan humare paas upalabdh hai. Domain aur Hosting ka charge alag se hota hai." },
+    { keywords: ["ecommerce", "online store", "dukaan online"], answer: "E-commerce website banwane ke liye (jahan customer online payment karke saman kharid sake), budget aapke products ki ginti par depend karega. WhatsApp par discuss karein." },
+    { keywords: ["data entry", "excel", "typing", "word", "ms office", "copy paste", "pdf to word"], answer: "Data Entry, Excel formatting, Typing, aur PDF to Word conversion ka kaam hum 100% accuracy ke sath karte hain. Aap humara Fiverr gig bhi check kar sakte hain." },
+
+    // ==========================================
+    // NAYE WALE (NEW ADDITIONS) - 100+ COMBINATIONS
+    // ==========================================
+
+    /* --- WEST BENGAL GOVT SCHEMES & FORMS --- */
+    { keywords: ["iti", "wb iti", "iti form", "iti admission"], answer: "West Bengal ITI aavedan (M Group & E Group) ke liye 10th/8th ki marksheet, Aadhar, aur photo chahiye. Apply online shuru hone par hum aapka form bhar denge." },
+    { keywords: ["jexpo", "diploma", "polytechnic", "vocalet", "wb diploma"], answer: "JEXPO aur VOCLET (Polytechnic/Diploma) ka form bharne ke liye 10th/12th marksheet aur Aadhar jaroori hai. Fees govt rule ke hisaab se lagegi." },
+    { keywords: ["swasthya sathi", "health card wb", "swastha sathi"], answer: "Swasthya Sathi card ke liye family ki female head ka Aadhar, sabhi members ka Aadhar aur Ration card lagta hai. Iski jankari ke liye WhatsApp karein." },
+    { ticket: ["kanyashree", "rupashree", "lakkhir bhandar", "lakshmir bhandar"], answer: "Lakkhir Bhandar, Kanyashree jaisi WB Govt schemes ka form humare cyber cafe me online/offline dono mil jayega aur bhara jayega." },
+    { keywords: ["police verification", "pcc", "character certificate"], answer: "Police Verification (PCC) banwane ke liye Aadhar, Voter, aur Passport photo lagti hai. Online apply karke hum receipt de denge, phir aapse SP office se contact kiya jayega." },
+    { keywords: ["trade license", "gumasta", "shop registration", "dukan ka license"], answer: "Dukan ya business ke liye Trade License / MSME Udyam registration hum turant kar dete hain. Aadhar, PAN, aur dukan ka proof chahiye." },
+    
+    /* --- PAN, AADHAR & ID CARDS EXTENDED --- */
+    { keywords: ["minor pan", "bache ka pan", "under 18 pan"], answer: "18 saal se kam umar ke bache (Minor) ka PAN card bhi ban jayega. Usme bache ka Aadhar aur Mata/Pita kisi ek ka Aadhar aur sign lagta hai." },
+    { keywords: ["e-pan", "instant pan", "10 min pan"], answer: "Agar Aadhar me mobile number link hai, toh Instant e-PAN (Free wala) turant 10 minute me ban jayega. PDF hum nikal kar de denge." },
+    { keywords: ["pvc aadhar", "plastic aadhar", "smart aadhar"], answer: "Original PVC plastic Aadhar card UIDAI se seedhe aapke ghar aayega. Hum online order kar denge, iska charge ₹50 + service charge hai." },
+    { keywords: ["voter transfer", "address change", "voter card me pata"], answer: "Voter card mein address change (transfer) ya photo badalne ka kaam online ho jayega. Naye pate (address) ka proof dena hoga." },
+    { keywords: ["driving license", "dl", "learning license", "driving form"], answer: "Learning Driving License ke liye online apply hum kar denge. Aapko Aadhar aur Blood Group ka detail dena hoga. Online test bhi hota hai." },
+    { keywords: ["e shram", "shramik card", "majdur card", "eshram"], answer: "E-Shram card 10 minute me ban jayega. Aadhar, bank passbook, aur mobile number jo Aadhar se link ho, wo lekar aayein." },
+    { keywords: ["ayushman", "ayushman card", "health id", "abha card"], answer: "Ayushman Bharat card ya ABHA (Health ID) card banwane ke liye Aadhar aur linked mobile number ki zaroorat hai. PDF aur Print dono nikal jayega." },
+
+    /* --- TICKETS & TRAVEL --- */
+    { keywords: ["train ticket", "railway ticket", "irctc", "tatkal ticket"], answer: "Haa, hum Train ticket (Sleeper, AC, Tatkal) book karte hain. Tatkal booking subah 10 baje (AC) aur 11 baje (Sleeper) hoti hai. Pura detail pehle bhej dein." },
+    { keywords: ["flight ticket", "aeroplane", "hawai jahaj", "air ticket"], answer: "Flight tickets sabhi airlines ki humare yahan best price me book ki jati hai. Destination aur date WhatsApp karein, hum rate bata denge." },
+    { keywords: ["bus ticket", "redbus", "volvo ticket"], answer: "Volvo aur normal Bus tickets bhi hum online book karte hain." },
+
+    /* --- CYBER CAFE GENERAL WORK (PRINT, XEROX, ETC) --- */
+    { keywords: ["print", "color print", "black and white", "print out"], answer: "Humare paas Black & White aur High-Quality Color Printing dono available hain. Bulk (zyada) print me special discount milega. Document WhatsApp kar dein." },
+    { keywords: ["xerox", "photocopy", "copy"], answer: "Haa xerox ki suvidha hai. Agar bahut saare pages hain toh hum rate sasta laga denge." },
+    { keywords: ["lamination", "lamination charge", "plastic cover"], answer: "Aadhar, PAN, Marksheet aur badhe documents ki premium lamination ho jayegi." },
+    { keywords: ["spiral binding", "binding", "project file"], answer: "College ya school ke project ki spiral binding aur file making ka kaam hum ekdum safai se karte hain." },
+    { keywords: ["scan", "scanning", "pdf banana"], answer: "Kisi bhi document ya photo ko High Resolution me scan karke PDF, JPG ya email par bhejne ka kaam hum karte hain." },
+
+    /* --- ADVANCED VIDEO & PHOTO EDITING --- */
+    { keywords: ["drone", "drone shoot", "aerial shoot", "drone camera"], answer: "Haa, events, shadi, ya music video ke liye hamare paas 4K Drone shoot ki suvidha available hai. Booking ke liye date confirm karein." },
+    { keywords: ["pre wedding", "pre-wedding", "prewed"], answer: "Pre-wedding photoshoot aur cinematic video dono humara premium package me aata hai. Hum location selection me bhi help karte hain." },
+    { keywords: ["product photography", "ecommerce shoot", "saman ka photo"], answer: "Amazon, Flipkart ya apne dukan ke items ke liye white background Product Photography hum professional lighting me karte hain." },
+    { keywords: ["old photo", "purani photo", "photo saaf", "damaged photo"], answer: "Kharab, fati hui, ya purani black & white photo ko naya karna (Colorize & Restorartion) ka jadoo humari editing team karti hai." },
+    { keywords: ["logo", "logo design", "banner", "poster design", "visiting card"], answer: "Business ke liye modern Logo, Banner, aur Visiting Card ka graphic design hum banate hain. Design pasand aane tak changes free hain." },
+    { keywords: ["youtube channel", "monetize", "youtube setup", "seo"], answer: "Naya YouTube channel banana, uska Banner, Logo, Tags aur SEO set karna humara special service hai. Videos bhi hum edit kar denge." },
+    { keywords: ["thumbnail", "youtube thumbnail", "clickbait thumbnail"], answer: "Aise Thumbnails jo dekhte hi log click karein! Hum High CTR thumbnails banate hain jisse aapke views badhenge." },
+    { keywords: ["subtitles", "caption", "reel caption", "video me text"], answer: "Reels aur Shorts ke liye trending animated Captions (jaise Alex Hormozi style) hum video me add karte hain. Isse video viral hone ka chance badhta hai." },
+
+    /* --- EDUCATION / STUDENT SERVICES --- */
+    { keywords: ["scholarship", "oasis", "aikyashree", "vidyashree"], answer: "Students ke liye sabhi Scholarship (OASIS, Aikyashree, NSP) ke forms online fill up kiye jate hain. Documents le aayein." },
+    { keywords: ["neet", "jee", "cuet", "entrance exam"], answer: "NEET, JEE, CUET aur dusre national entrance exams ka form ekdum carefully bina kisi galti ke bharte hain. Correction window ka wait nahi karna padega." },
+    { keywords: ["resume", "cv", "biodata", "bio data"], answer: "Job ke liye professional aur modern Resume (CV / Biodata) hum banate hain. Sirf ₹50 me premium template design milega." },
+    { keywords: ["assignment", "project type", "college project", "typing karna"], answer: "College ke lambe assignments ko MS Word me type karna, formatting karna aur PDF banane ka kaam hum jaldi aur sahi karte hain." },
+
+    /* --- WEB DESIGN & DEV --- */
+    { keywords: ["ecommerce site", "online dukan", "saman bechne ki site"], answer: "Aapke business ke liye E-commerce website jisme cart, UPI payment aur order tracking ho, wo hum develop karte hain." },
+    { keywords: ["domain", "hosting", "website ka naam", "dot com"], answer: "Aapko .com, .in ya koi bhi Domain name chahiye, hum book karke aapko host karke denge." },
+    { keywords: ["maintenance", "website update", "site theek karna"], answer: "Agar aapki purani website chal nahi rahi ya design theek karwana hai, toh humari Web team usko fix karke naya jaisa bana degi." },
+    
+    /* --- ERRORS / COMPLAINTS / HELP --- */
+    { keywords: ["galti ho gayi", "mistake in form", "correction karna hai"], answer: "Agar form bharne me koi galti ho gayi hai, toh tension mat lijiye. Correction window open hote hi hum usko theek kar denge. WhatsApp pe details dijiye." },
+    { keywords: ["photo upload nahi", "size kam", "resize photo", "signature size"], answer: "Agar kisi dusri jagah form bharte waqt photo/sign upload nahi ho raha, toh humari website pe aakar WhatsApp karein, hum size theek karke bhej denge." },
+    { keywords: ["order late", "time lag gaya", "abhi tak nahi mila"], answer: "Maafi chahenge! Agar order me deri ho rahi hai toh turant 'Track Your Order' me apna ID daaliye, ya direct Chandan Sir ko call kijiye: +91 8986993592." },
+    
+    /* --- FALLBACK CHITCHAT --- */
+    { keywords: ["bye", "goodbye", "phir milenge", "see you"], answer: "Goodbye! Apna Centre ko yaad rakhne ke liye shukriya. Aapka din shubh ho!" },
+    { keywords: ["nice", "good", "badhiya", "mast", "superb"], answer: "Shukriya! Hum hamesha apni best service dene ki koshish karte hain." },
+    { keywords: ["help", "madad", "support"], answer: "Ji bilkul, batayein kya madad chahiye? Aap kisi form, photo, video ya website ke baare me pooch sakte hain." }
+];
+
+        
+
+
+
+
+
+        function sendQuickReply(text) {
+            document.getElementById('chatInput').value = text;
+            handleUserMessage();
+        }
+
+        function handleChatEnter(event) {
+            if(event.key === "Enter") handleUserMessage(); 
+        }
+
+        function handleUserMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim().toLowerCase();
+            
+            if(!message) return;
+
+            addChatMessage(input.value.trim(), 'user-msg');
+            input.value = '';
+
+            const quickOpts = document.querySelector('.chat-quick-options');
+            if(quickOpts) quickOpts.style.display = 'none';
+
+            const typingId = "typing-" + Date.now();
+            addChatMessage("Apna Bot soch raha hai...", 'bot-msg', typingId);
+
+            setTimeout(() => {
+                let foundAnswer = null;
+                
+                for (let item of botKnowledge) {
+                    for (let keyword of item.keywords) {
+                        if (message.includes(keyword)) {
+                            foundAnswer = item.answer;
+                            break;
+                        }
+                    }
+                    if (foundAnswer) break;
+                }
+
+                if (foundAnswer) {
+                    document.getElementById(typingId).innerText = foundAnswer;
+                } else {
+                    document.getElementById(typingId).innerText = "Maafi chahenge, mujhe ye samajh nahi aaya. Kripya apna sawal seedha WhatsApp par poochein.";
+                    
+                    const chatBody = document.getElementById('chatBody');
+                    const waBtn = document.createElement('button');
+                    waBtn.className = "btn btn-gold";
+                    waBtn.style.marginTop = "10px";
+                    waBtn.style.fontSize = "0.85rem";
+                    waBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Chat with Chandan Sir';
+                    waBtn.onclick = () => window.open('https://api.whatsapp.com/send?phone=918986993592&text=Hi, I have a query that the bot could not answer...', '_blank');
+                    chatBody.appendChild(waBtn);
+                }
+                document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+            }, 500); 
+        }
+
+        function addChatMessage(text, className, id = null) {
+            const chatBody = document.getElementById('chatBody');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-msg ${className}`;
+            if(id) msgDiv.id = id;
+            msgDiv.innerText = text;
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // ==========================================================================
+        // 4. OTHER LOGIC (Rating, Modals, Options, Observers)
+        // ==========================================================================
+        function openReviewModal() {
+            document.getElementById('reviewModal').style.display = 'flex';
+            setRating(5); 
+        }
+
+        function setRating(val) {
+            document.getElementById('ratingValue').value = val;
+            const stars = document.getElementById('starContainer').children;
+            
+            for(let i=0; i<stars.length; i++) { 
+                stars[i].classList.remove('selected'); 
+            }
+            
+            for(let i=0; i<stars.length; i++) {
+                if(stars[i].getAttribute('data-val') == val) { 
+                    stars[i].classList.add('selected'); 
+                }
+            }
+        }
+
+        // ==========================================================================
+        // NEW/UPDATED: THIS SENDS REVIEW TO GOOGLE SHEETS DIRECTLY
+        // ==========================================================================
+        async function submitReview() {
+            const stars = document.getElementById('ratingValue').value;
+            const service = document.getElementById('reviewService').value;
+            const name = document.getElementById('reviewerName').value.trim();
+            const email = document.getElementById('reviewerEmail').value.trim();
+            const text = document.getElementById('reviewerText').value.trim();
+            
+            if(!service) { alert("Please select the service you used."); return; }
+            if(!name) { alert("Please enter your name."); return; }
+            if(!email) { alert("Please enter your email ID."); return; }
+            if(!text) { alert("Please write your review."); return; }
+            
+            let starString = '';
+            for(let i=0; i<stars; i++) { starString += '⭐'; }
+
+            // Change button text to show loading
+            const btn = document.querySelector('#reviewModal .btn-gold');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+            // Prepare data for Google Sheet
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('service', service);
+            formData.append('rating', starString);
+            formData.append('text', text);
+
+            try {
+                // Send to Google Sheets POST API
+                await fetch(scriptUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // Allows bypassing strict CORS issues
+                });
+                alert("Thank you! Your premium review has been saved securely.");
+            } catch (e) {
+                alert("Thank you! Your premium review has been saved securely.");
+            }
+            
+            btn.innerHTML = originalText;
+            closeModals();
+        }
+
+        const slider = document.getElementById('bna-slider'); 
+        const wrapper = document.getElementById('bna-wrapper'); 
+        if(slider && wrapper) { 
+            slider.addEventListener('input', function() { 
+                wrapper.style.width = this.value + '%'; 
+            }); 
+        }
+        
+        const revealElements = document.querySelectorAll('.reveal'); 
+        const revealObserver = new IntersectionObserver((entries, observer) => { 
+            entries.forEach(entry => { 
+                if(entry.isIntersecting) { 
+                    entry.target.classList.add('active'); 
+                    observer.unobserve(entry.target); 
+                } 
+            }); 
+        }, { threshold: 0.15 }); 
+        
+        revealElements.forEach(el => revealObserver.observe(el));
+        
+        window.addEventListener('scroll', () => { 
+            const header = document.getElementById('main-header'); 
+            if(window.scrollY > 50) { 
+                header.classList.add('scrolled'); 
+            } else { 
+                header.classList.remove('scrolled'); 
+            } 
+            
+            // Top Scroll Progress Bar Update Logic
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        });
+        
+        function toggleSidebar() { 
+            document.getElementById('sidebar').classList.toggle('active'); 
+        }
+
+        const cyberData = { 
+            'ssc_chsl': { title: 'SSC CHSL (10+2) Form 2026', dates: 'Apply Before: 05 April 2026', fee: 'Gen/OBC: ₹100', eligibility: 'Class 12th Passed' }, 
+            'rrb_rpf': { title: 'Railway RPF Constable & SI', dates: 'Last Date: 14 April 2026', fee: 'Gen/OBC: ₹500', eligibility: 'Class 10th / Graduation' }, 
+            'gds': { title: 'Indian Post GDS Apply 2026', dates: 'Last Date: 20 April 2026', fee: 'Gen/OBC: ₹100', eligibility: 'Class 10th Passed' }, 
+            'ctet_form': { title: 'CTET July 2026 Form', dates: 'Last Date: 02 April 2026', fee: 'Single Paper: ₹1000', eligibility: 'B.Ed / D.El.Ed' }, 
+            'upsc_nda': { title: 'UPSC NDA/CDS Admit Card', dates: 'Exam Date: 19 April 2026', fee: 'Printing Charge: ₹10', eligibility: 'Bring Reg No' }, 
+            'ssc_gd': { title: 'SSC GD Constable Exam City', dates: 'Exams Ongoing', fee: 'Printing Charge: ₹10', eligibility: 'Reg No Required' }, 
+            'jee_main': { title: 'JEE Main Session 2 City', dates: '01 - 15 April 2026', fee: 'Printing Charge: ₹10', eligibility: 'Application No' }, 
+            'bihar_bed': { title: 'Bihar B.Ed Admit Card', dates: 'Expected in April 2026', fee: 'Printing Charge: ₹10', eligibility: 'Login Details' }, 
+            'bihar_board': { title: 'Bihar Board 12th Result', dates: '20-25 March 2026', fee: 'Checking Charge: ₹10', eligibility: 'Roll Code & No' }, 
+            'up_police_res': { title: 'UP Police Constable Result', dates: 'Expected Soon', fee: 'Checking Charge: ₹10', eligibility: 'Reg No' }, 
+            'pm_kisan': { title: 'PM Kisan e-KYC', dates: 'Mandatory', fee: 'Processing Charge: ₹50', eligibility: 'Aadhar Card' }, 
+            'pan_update': { title: 'PAN Card Apply', dates: 'Open All Year', fee: 'Govt Fee ₹107', eligibility: 'Aadhar with Mobile' } 
+        };
+        
+        // UPDATED DEMO FUNCTION FOR CYBER SERVICES AND OTHERS WITH MASSIVE PREMIUM MEDIA
+        function openDemo(key) { 
+            if(key === 'cyber') {
+                document.getElementById('demoTitle').innerText = 'Cyber Services';
+                document.getElementById('demoChecklist').innerHTML = '<p style="text-align:center; color:var(--text-silver); margin-bottom:20px;">We handle all major online applications and digital documents.</p>';
+                
+                let listHTML = '<div class="demo-list">';
+                listHTML += `
+                    <div class="demo-list-item" onclick="selectCyberOption('PAN Card')">
+                        <i class="fas fa-id-card"></i>
+                        <div><h4>PAN Card Services</h4><p>New / Correction</p></div>
+                    </div>
+                    <div class="demo-list-item" onclick="selectCyberOption('Aadhar Update')">
+                        <i class="fas fa-fingerprint"></i>
+                        <div><h4>Aadhar Update</h4><p>Print / PVC</p></div>
+                    </div>
+                    <div class="demo-list-item" onclick="selectCyberOption('Voter ID')">
+                        <i class="fas fa-address-card"></i>
+                        <div><h4>Voter ID</h4><p>Apply / Correction</p></div>
+                    </div>
+                    <div class="demo-list-item" onclick="selectCyberOption('Govt Job Forms')">
+                        <i class="fas fa-file-signature"></i>
+                        <div><h4>Govt. Job Forms</h4><p>SSC, Railway, Bank</p></div>
+                    </div>
+                    <div class="demo-list-item" onclick="selectCyberOption('Passport Apply')">
+                        <i class="fas fa-passport"></i>
+                        <div><h4>Passport</h4><p>Fresh / Tatkal</p></div>
+                    </div>
+                    <div class="demo-list-item" onclick="selectCyberOption('PF Services')">
+                        <i class="fas fa-piggy-bank"></i>
+                        <div><h4>PF Services</h4><p>Withdrawal / KYC</p></div>
+                    </div>
+                `;
+                listHTML += '</div>';
+                
+                document.getElementById('demoGallery').innerHTML = listHTML;
+                document.getElementById('demoModal').style.display = 'flex';
+                return;
+            }
+
+            // Extensive high-quality media for normal demo logic
+            const data = { 
+                'photo': { 
+                    title: 'Photography & Editing', 
+                    checklist: ['High-End Retouching', 'Color Grading', 'Wedding & Event Photography', 'Product Shoots'], 
+                    images: [
+                        'https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/1382731/pexels-photo-1382731.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/2055236/pexels-photo-2055236.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/247322/pexels-photo-247322.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=800',
+   '1211/1733920333128.jpg',
+   '1211/1734320107777 (1).jpg',
+   '1211/1742828725964.jpg',
+   '1211/1747901801351 (1).jpg',
+   '1211/IMG20250802132635 (1).jpg',
+   '1211/RIYAN_20250427_174635_🧑‍🤝‍🧑Portrait Click (cool) by Riyan (1).jpg',
+   '1211/IMG-20250108-WA0011.jpg',
+   '1211/IMG_20221020_105500_0484.jpg',
+   '1211/1734456299925.jpg',
+      '1211/RIYAN_20250411_181445_⛱️Sky Blue by Riyan.jpg',
+   '1211/1747901801351 (1).jpg',
+   '1211/1735188342693 (1) (1).jpg',
+   '1211/RIYAN_20250417_144207_⛱️Sky Blue by Riyan.jpg',
+   '1211/retouch_2025070220023912.jpg',
+
+
+                                                '1211/1733920333128.jpg',
+
+                        'https://images.pexels.com/photos/1484794/pexels-photo-1484794.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/1572878/pexels-photo-1572878.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/1376042/pexels-photo-1376042.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        '1211/1675343857080 (1).jpg'
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                    ] 
+                }, 
+                'video': { 
+                    title: 'Video Editing', 
+                    checklist: ['Cinematic Reels', 'YouTube Vlogs', 'Corporate Promos', 'Wedding Highlights'], 
+                    videos: [
+                     '1122/04.mp4',
+                        '1122/0b0330600af44a1cb5fbe37b6180a917.mp4',
+                        '1122/04.mp4',
+                        '1122/01.mp4',
+                        '1122/02.mp4',
+                        '1122/03.mp4',
+  '1122/14.mp4',  
+  '1122/15.mp4', 
+   '1122/0122.mp4', 
+    '1122/0326(2).mp4',
+      '1122/0621(4).mp4', 
+       '1122/0830(1).mp4',
+  '1122/durgapuja 1.mp4', 
+   '1122/lv_0_20250826170313.mp4', 
+
+  '1122/0830(2).mp4',
+    '1122/0928.mp4', 
+     '1122/1001.mp4',
+      '1122/1212(1).mp4', 
+       '1122/AQOGDYjvQHKahKPbcqdgCy_S5gWnHif2-G3_N1elr_MGcEGZ0CbtiAbe2illY9dBpk_YS29EmaQzj5BdCrBYI72tS2UKwBtSLurMxK8.mp4',  '1122/CH1.mp4',
+
+
+
+                        '1122/12.mp4'
+                    ] 
+                }, 
+                'web': { 
+                    title: 'Web Design', 
+                    checklist: ['Custom UI/UX', 'E-commerce Setup', 'Responsive Design', 'SEO Optimization'], 
+                    images: [
+                        'Screenshot 2026-03-27 125733.png',
+                        'Screenshot 2026-03-27 130145.png',
+                        'https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/2653362/pexels-photo-2653362.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/160107/pexels-photo-160107.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=800'
+                    ] 
+                },
+                'data': {
+                    title: 'Data Entry & MS Office',
+                    checklist: ['Excel Data Processing', 'Virtual Assistant', 'Copy-Paste Tasks', 'Data formatting'],
+                    images: [
+                        'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/1595385/pexels-photo-1595385.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/2182863/pexels-photo-2182863.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800',
+                        'https://images.pexels.com/photos/373076/pexels-photo-373076.jpeg?auto=compress&cs=tinysrgb&w=800'
+                    ]
+                }
+            }[key]; 
+            
+            document.getElementById('demoTitle').innerText = data.title; 
+            
+            let list = '<ul style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; padding:0; list-style:none;">'; 
+            data.checklist.forEach(i => { list += `<li style="margin-bottom:8px; background:rgba(255,215,0,0.1); padding:5px 10px; border-radius:15px; font-size:0.85rem;"><i class="fas fa-check" style="color:var(--gold); margin-right:8px;"></i>${i}</li>`; }); 
+            list += '</ul>'; 
+            document.getElementById('demoChecklist').innerHTML = list; 
+            
+            let gal = ''; 
+            if(data.videos) data.videos.forEach(url => { gal += `<video src="${url}" controls style="background:#000; width:100%; border-radius:10px; border:1px solid #333; margin-bottom:10px;"></video>`; }); 
+            if(data.images) data.images.forEach(url => { gal += `<img src="${url}" onclick="showZoom(this.src)" style="width:100%; height:120px; object-fit:cover; border-radius:10px; cursor:pointer; border:1px solid #333; transition:0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">`; }); 
+            
+            document.getElementById('demoGallery').innerHTML = gal; 
+            document.getElementById('demoModal').style.display = 'flex'; 
+        }
+        
+        function openCyberInfo(key) { 
+            const data = cyberData[key]; 
+            document.getElementById('cyberTitle').innerText = data.title; 
+            document.getElementById('cyberDates').innerText = data.dates; 
+            document.getElementById('cyberFee').innerText = data.fee; 
+            document.getElementById('cyberEligibility').innerText = data.eligibility; 
+            
+            document.getElementById('cyberOrderBtn').onclick = function() { 
+                closeModals(); 
+                openOrder('Process: ' + data.title); 
+            }; 
+            
+            document.getElementById('cyberInfoModal').style.display = 'flex'; 
+        }
+
+        let currentSelectedService = '';
+        
+        function openPackageModal(serviceName) {
+            currentSelectedService = serviceName;
+            document.getElementById('packageServiceTitle').innerText = "For: " + serviceName;
+            document.getElementById('packageModal').style.display = 'flex';
+        }
+        
+        function selectPackage(packageName, price) {
+            document.getElementById('packageModal').style.display = 'none';
+            const finalServiceName = `${currentSelectedService} (${packageName} - ${price})`;
+            openOrder(finalServiceName);
+        }
+
+        function openCyberOptionsModal() {
+            document.getElementById('cyberOptionsModal').style.display = 'flex';
+        }
+        
+        function selectCyberOption(optionName) {
+            closeModals(); // Close demo modal if open
+            setTimeout(() => {
+                openOrder('Cyber Request: ' + optionName);
+            }, 100);
+        }
+
+        function showZoom(src) { 
+            document.getElementById('lightboxImg').src = src; 
+            document.getElementById('lightbox').style.display = 'flex'; 
+        } 
+        
+        function closeLightbox() { 
+            document.getElementById('lightbox').style.display = 'none'; 
+        } 
+        
+        function openOrder(svc) { 
+            document.getElementById('serviceInput').value = svc; 
+            document.getElementById('orderModal').style.display = 'flex'; 
+        }
+        
+        function closeModals() { 
+            document.getElementById('demoModal').style.display = 'none'; 
+            document.getElementById('orderModal').style.display = 'none'; 
+            document.getElementById('cyberInfoModal').style.display = 'none'; 
+            document.getElementById('reviewModal').style.display = 'none'; 
+            document.getElementById('packageModal').style.display = 'none';
+            document.getElementById('cyberOptionsModal').style.display = 'none';
+            document.getElementById('exitPopup').style.display = 'none';
+            document.getElementById('demoGallery').innerHTML = ''; 
+        }
+        
+        function sendWhatsapp() { 
+            const svc = document.getElementById('serviceInput').value; 
+            const name = document.getElementById('nameInput').value; 
+            const det = document.getElementById('detailsInput').value; 
+            
+            if(!name) { 
+                alert("Please enter your name!"); 
+                document.getElementById('nameInput').focus(); 
+                return; 
+            } 
+            
+            const textMsg = `Hello Apna Centre!%0A%0A*NEW INQUIRY*%0A*Request:* ${svc}%0A*Name:* ${name}%0A*Details:* ${det}`;
+            window.open(`https://api.whatsapp.com/send?phone=918986993592&text=${textMsg}`, '_blank'); 
+            
+            closeModals(); 
+        }
+        
+        window.onclick = function(e) { 
+            if(e.target.className.includes('modal-overlay')) {
+                closeModals(); 
+            }
+        }
+
+        // ==========================================================================
+        // 5. NEW FEATURES LOGIC (Auto-Typing, Cost Estimator, Lang Toggle, Exit Intent)
+        // ==========================================================================
+
+        // Auto-Typing Effect Logic
+        const textArray = ["Cyber Services", "Video Editing", "Web Design", "Data Entry", "Photography"];
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById("typing-text");
+
+        function typeEffect() {
+            if (!typingElement) return;
+
+            const currentText = textArray[textIndex];
+            
+            if (isDeleting) {
+                typingElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typingSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                typingSpeed = 2000; 
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % textArray.length;
+                typingSpeed = 500; 
+            }
+
+            setTimeout(typeEffect, typingSpeed);
+        }
+        
+        setTimeout(typeEffect, 1000);
+
+        // Interactive Cost Calculator Logic
+        function calculatePrice() {
+            const servicePrice = parseFloat(document.getElementById('calcService').value);
+            const speedMultiplier = parseFloat(document.getElementById('calcSpeed').value);
+            
+            const total = servicePrice * speedMultiplier;
+            
+            const priceEl = document.getElementById('calcTotalPrice');
+            priceEl.style.opacity = 0;
+            setTimeout(() => {
+                priceEl.innerText = '₹' + total;
+                priceEl.style.opacity = 1;
+            }, 200);
+        }
+
+        function sendCalcToWa() {
+            const serviceSelect = document.getElementById('calcService');
+            const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
+            
+            const speedSelect = document.getElementById('calcSpeed');
+            const speedText = speedSelect.options[speedSelect.selectedIndex].text;
+            
+            const price = document.getElementById('calcTotalPrice').innerText;
+            
+            const textMsg = `Hello Apna Centre!%0A%0A*ESTIMATE INQUIRY*%0A*Service:* ${serviceText}%0A*Speed:* ${speedText}%0A*Estimated Price:* ${price}%0A%0AI would like to discuss this further.`;
+            window.open(`https://api.whatsapp.com/send?phone=918986993592&text=${textMsg}`, '_blank'); 
+        }
+
+        // Language Toggle Logic (Google Translate API)
+        let currentLang = 'en';
+        function toggleLanguage() {
+            const select = document.querySelector('.goog-te-combo');
+            if(select) {
+                if(select.value === 'hi') {
+                    select.value = 'en';
+                    currentLang = 'en';
+                } else {
+                    select.value = 'hi';
+                    currentLang = 'hi';
+                }
+                select.dispatchEvent(new Event('change'));
+                
+                const btnHTML = currentLang === 'hi' ? '<i class="fas fa-globe"></i> EN' : '<i class="fas fa-globe"></i> HINDI';
+                document.getElementById('langToggleBtn').innerHTML = btnHTML;
+                document.getElementById('mobLangToggle').innerHTML = btnHTML;
+            } else {
+                alert("Translator is still loading, please wait a second...");
+            }
+        }
+
+        // Exit-Intent Popup Logic
+        let exitPopupShown = false;
+        
+        document.addEventListener('mouseleave', function(e) {
+            if (e.clientY < 20 && !exitPopupShown) {
+                showExitPopup();
+            }
+        });
+
+        setTimeout(() => {
+            if (!exitPopupShown) {
+                showExitPopup();
+            }
+        }, 45000); 
+
+        function showExitPopup() {
+            document.getElementById('exitPopup').style.display = 'flex';
+            exitPopupShown = true;
+        }
+
+        function closeExitPopup() {
+            document.getElementById('exitPopup').style.display = 'none';
+        }
+
+        function claimDiscount() {
+            const textMsg = `Hello Apna Centre, I want to claim my *10% DISCOUNT* code: *APNA10*`;
+            window.open(`https://api.whatsapp.com/send?phone=918986993592&text=${textMsg}`, '_blank');
+            closeExitPopup();
+        }
+
+        // 3D Hover Tilt Effect Logic
+        const tiltCards = document.querySelectorAll('.tilt-card');
+        
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; 
+                const y = e.clientY - rect.top;  
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -15; 
+                const rotateY = ((x - centerX) / centerX) * 15;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                card.style.transition = 'transform 0.5s ease, box-shadow 0.4s ease, border-color 0.4s ease';
+            });
+            
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'none';
+            });
+        });
+
+        // ==========================================================================
+        // CUSTOM MAGIC CURSOR LOGIC
+        // ==========================================================================
+        const cursor = document.getElementById('customCursor');
+        const cursorDot = document.getElementById('customCursorDot');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        // Add hover effect to interactive elements
+        const clickables = document.querySelectorAll('a, button, input, select, textarea, .card, .portfolio-item, .notice-list li, .float-btn, .help-float-btn, .logo, .hamburger, .close-btn, .close-lightbox');
+        
+        clickables.forEach((el) => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+            });
+        });
+
+        // ==========================================================================
+        // ANIMATED PARTICLE BACKGROUND LOGIC (CANVAS)
+        // ==========================================================================
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 12000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 1) - 0.5;
+                let directionY = (Math.random() * 1) - 0.5;
+                let color = 'rgba(255, 215, 0, 0.4)'; 
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connectParticles();
+        }
+
+        function connectParticles() {
+            let maxDistance = (canvas.width / 7) * (canvas.height / 7);
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    
+                    if (distance < maxDistance) {
+                        let opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = 'rgba(255, 215, 0,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        window.addEventListener('resize', function() {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            initParticles();
+        });
+
+        initParticles();
+        animateParticles();
+
+    </script>
+</body>
+</html>
